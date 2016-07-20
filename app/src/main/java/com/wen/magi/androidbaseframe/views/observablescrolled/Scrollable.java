@@ -11,4 +11,6 @@ public interface Scrollable {
 
     int getCurrentScrollY();
 
+    void setScrollCallback(ObservableScrollCallback callback);
+
 }

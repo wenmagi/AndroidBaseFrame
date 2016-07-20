@@ -2,6 +2,7 @@ package com.wen.magi.androidbaseframe.managers;
 
 import android.content.Context;
 
+import com.wen.magi.androidbaseframe.algorithms;
 import com.wen.magi.androidbaseframe.base.AppApplication;
 import com.wen.magi.androidbaseframe.models.AppUser;
 import com.wen.magi.androidbaseframe.utils.SysUtils;
@@ -22,6 +23,7 @@ public class AppManager {
     public static void initInMainThread(Context context) {
         applicationContext = context;
         SysUtils.initialize(context);
+        algorithms.getInstance();
 
     }
 

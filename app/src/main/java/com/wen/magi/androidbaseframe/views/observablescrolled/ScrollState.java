@@ -13,5 +13,5 @@ public enum ScrollState {
 
     DOWN,
 
-    STOP
+    ScrollState, STOP
 }

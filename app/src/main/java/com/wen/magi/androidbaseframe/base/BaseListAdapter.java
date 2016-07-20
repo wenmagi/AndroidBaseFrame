@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 
-public class BaseListAdapter<T> extends BaseAdapter {
+public abstract class BaseListAdapter<T> extends BaseAdapter {
 
     protected Context context;
     protected List<T> datas;
@@ -56,5 +56,31 @@ public class BaseListAdapter<T> extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
+    }
+
+    /**
+     * 局部刷新可见区域的数据
+     *
+     * @param view 需要刷新的View
+     * @param itemIndex 该view的位置
+     */
+    protected void updateViews(View view, int itemIndex) {
+        if (view == null)
+            return;
+
+        ViewHolder holder = (ViewHolder) view.getTag();
+        findHolderViewAndRefresh(holder, itemIndex);
+    }
+
+    /**
+     * 寻找到holder持有view的内容，并进行刷新
+     *
+     * @param holder 目标holder
+     * @param itemIndex 数据datas的位置
+     */
+    protected void findHolderViewAndRefresh(ViewHolder holder, int itemIndex) {
+    }
+
+    class ViewHolder {
     }
 }

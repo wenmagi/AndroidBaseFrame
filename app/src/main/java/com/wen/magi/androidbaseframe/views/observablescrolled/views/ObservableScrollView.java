@@ -8,6 +8,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
+import com.wen.magi.androidbaseframe.views.observablescrolled.ObservableScrollCallback;
+import com.wen.magi.androidbaseframe.views.observablescrolled.ScrollState;
+import com.wen.magi.androidbaseframe.views.observablescrolled.Scrollable;
+
 
 /**
  * ScrollView that its scroll position can be observed.
@@ -17,7 +21,7 @@ public class ObservableScrollView extends ScrollView implements Scrollable {
     private int mPrevScrollY;
     private int mScrollY;
 
-    private ObservableScrollViewCallbacks mCallbacks;
+    private ObservableScrollCallback mCallbacks;
     private ScrollState mScrollState;
 
     public ObservableScrollView(Context context) {
@@ -53,23 +57,19 @@ public class ObservableScrollView extends ScrollView implements Scrollable {
     }
 
     @Override
-    public void setScrollViewCallbacks(ObservableScrollViewCallbacks listener) {
-        mCallbacks = listener;
-    }
-
-    @Override
-    public void scrollVerticallyTo(int y) {
-    }
-
-    @Override
     public int getCurrentScrollY() {
-        return 0;
+        return mScrollY;
+    }
+
+    @Override
+    public void setScrollCallback(ObservableScrollCallback callback) {
+        mCallbacks = callback;
     }
 
 
     private void dispatchOnScrollChanged(int scrollY) {
         if (mCallbacks != null) {
-            mCallbacks.onScrollChanged(scrollY,mScrollState);
+            mCallbacks.onScrollChanged(scrollY);
         }
     }
 

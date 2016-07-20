@@ -6,10 +6,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
+import android.support.v4.text.TextUtilsCompat;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.TouchDelegate;
 import android.view.View;
@@ -226,4 +229,44 @@ public class ViewUtils {
         return bmp;
     }
 
+    /**
+     * 获取文字的宽高
+     *
+     * @param paint
+     * @param str
+     * @return 数组形式返回
+     */
+    public static float[] getTextWH(Paint paint, String str) {
+        float a[] = new float[2];
+        a[0] = getTextWidth(paint,str);
+        a[1] = getTextHeight(paint,str);
+        return a;
+    }
+
+    /**
+     * 获取文字的高度
+     *
+     * @param paint
+     * @param str
+     * @return
+     */
+    public static float getTextHeight(Paint paint, String str) {
+        if(paint==null|| TextUtils.isEmpty(str))
+            return 0;
+        Paint.FontMetrics metrics = paint.getFontMetrics();
+        return (int) Math.ceil(metrics.descent - metrics.top) + 2;
+    }
+
+    /**
+     * 或租文字的宽度
+     *
+     * @param paint
+     * @param str
+     * @return
+     */
+    public static float getTextWidth(Paint paint, String str){
+        if(paint==null|| TextUtils.isEmpty(str))
+            return 0;
+        return paint.measureText(str);
+    }
 }

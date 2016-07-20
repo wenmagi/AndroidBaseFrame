@@ -38,6 +38,7 @@ public class SysUtils {
     public static String PHONE_NUMBER;
     public static int WIDTH;
     public static int HEIGHT;
+    public static float DENSITY;
     public static float DENSITYDPI;
     public static float SCALEDDENSITY;
     public static boolean EXTERNAL_STORAGE_WRITABLE = false;
@@ -98,6 +99,7 @@ public class SysUtils {
             DisplayMetrics metric = new DisplayMetrics();
             display.getMetrics(metric);
             DENSITYDPI = metric.densityDpi;
+            DENSITY = metric.density;
             SCALEDDENSITY = metric.scaledDensity;
 
         } catch (Exception e) {

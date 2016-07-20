@@ -21,7 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 /**
  * Created by MVEN on 16/5/3.
  */
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener, UrlRequest.RequestDelegate {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, UrlRequest.RequestDelegate {
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -54,8 +54,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
+        OnClickView(v);
     }
+
+    protected abstract void OnClickView(View v);
 
     private void initView() {
         RelativeLayout contentView = new RelativeLayout(this);

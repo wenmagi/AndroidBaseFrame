@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
@@ -515,4 +516,7 @@ public class LangUtils {
         BYTES_POOL.release(buf);
     }
 
+    public static int max(int value1, int value2) {
+        return value1 > value2 ? value1 : value2;
+    }
 }

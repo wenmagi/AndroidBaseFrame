@@ -15,15 +15,14 @@ import com.wen.magi.androidbaseframe.views.dialog.SweetAlertDialog;
  */
 
 
-
-public class DialogTestActivity extends BaseActivity implements View.OnClickListener {
+public class DialogTestActivity extends BaseActivity {
 
     private int i = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_test_activity);
+        setContentView(R.layout.dialog_test_fragment);
         findViewById(R.id.basic_test).setOnClickListener(this);
         findViewById(R.id.under_text_test).setOnClickListener(this);
         findViewById(R.id.error_text_test).setOnClickListener(this);
@@ -34,8 +33,11 @@ public class DialogTestActivity extends BaseActivity implements View.OnClickList
         findViewById(R.id.progress_dialog).setOnClickListener(this);
     }
 
+
     @Override
-    public void onClick(View v) {
+    protected void OnClickView(View v) {
+
+
         switch (v.getId()) {
             case R.id.basic_test:
                 // default title "Here's a message!"
@@ -170,6 +172,7 @@ public class DialogTestActivity extends BaseActivity implements View.OnClickList
                     }
                 }.start();
                 break;
+
         }
     }
 }
