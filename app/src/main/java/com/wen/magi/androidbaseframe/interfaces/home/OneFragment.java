@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.wen.magi.androidbaseframe.R;
 import com.wen.magi.androidbaseframe.base.BaseFragment;
+import com.wen.magi.androidbaseframe.base.BaseLazyLoadFragment;
 
 /**
  * Created by MVEN on 16/7/6.
@@ -16,7 +17,7 @@ import com.wen.magi.androidbaseframe.base.BaseFragment;
  */
 
 
-public class OneFragment extends BaseFragment {
+public class OneFragment extends BaseLazyLoadFragment {
 
     @Nullable
     @Override

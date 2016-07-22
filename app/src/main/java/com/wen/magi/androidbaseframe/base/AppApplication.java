@@ -20,7 +20,7 @@ public class AppApplication extends Application {
         super.onCreate();
         appApplication = this;
         String packageName = getApplicationContext().getPackageName();
-        //防止因多线程造成的多次初始化
+        //防止多进程造成的多次初始化
         if (packageName != null && packageName.equals(getCurrProcessName()))
             AppManager.initInMainThread(appApplication);
     }

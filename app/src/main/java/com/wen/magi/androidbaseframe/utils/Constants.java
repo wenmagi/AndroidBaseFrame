@@ -8,5 +8,9 @@ public class Constants {
     //    SysUtils
     public static final String LOG_TAG = "App";
     public static final String EXTERNAL_STORAGE_WRITABLE = "app_external_writable";
-
+    /**
+     * AppSettingManager
+     */
+    public static final String SETTINGS_IS_PUSHMESSAGE_ON = "settings_is_pushmessage_on";
+    public static final String SETTINGS_PIC_QUALITY = "settings_pic_quality";
 }

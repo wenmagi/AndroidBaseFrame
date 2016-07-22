@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class BottomDialog {
 
-    public static void showBottomDialog(Context mContext, View view, ArrayList<View.OnClickListener> listeners) {
+    public static void showBottomDialog(Context mContext, View view, final View.OnClickListener listener) {
 
         final AlertDialog dlg = new AlertDialog.Builder(mContext, R.style.dialog_bkg).create();
         dlg.show();
@@ -38,7 +38,6 @@ public class BottomDialog {
         int childCount = ((ViewGroup) view).getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = ((ViewGroup) view).getChildAt(i);
-            final View.OnClickListener listener = listeners.get(i);
             if (child != null && listener != null) {
                 child.setOnClickListener(new View.OnClickListener() {
                     @Override

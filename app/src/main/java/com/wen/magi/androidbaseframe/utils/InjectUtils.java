@@ -1,6 +1,5 @@
 package com.wen.magi.androidbaseframe.utils;
 
-import android.app.Activity;
 import android.view.View;
 
 import com.wen.magi.androidbaseframe.annotations.From;
@@ -8,6 +7,12 @@ import com.wen.magi.androidbaseframe.base.BaseActivity;
 import com.wen.magi.androidbaseframe.base.BaseFragment;
 
 import java.lang.reflect.Field;
+
+/**
+ * Created by MVEN on 16/6/16.
+ * <p/>
+ * email: magiwen@126.com.
+ */
 
 public class InjectUtils {
     /**

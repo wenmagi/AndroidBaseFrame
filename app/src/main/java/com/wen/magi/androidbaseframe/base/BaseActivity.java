@@ -14,6 +14,7 @@ import com.wen.magi.androidbaseframe.base.net.EService;
 import com.wen.magi.androidbaseframe.base.net.ARequest;
 import com.wen.magi.androidbaseframe.bundles.BaseBundleParams;
 import com.wen.magi.androidbaseframe.utils.InjectUtils;
+import com.wen.magi.androidbaseframe.utils.LogUtils;
 import com.wen.magi.androidbaseframe.web.UrlRequest;
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,6 +47,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         InjectUtils.autoInjectR(this);
     }
 
+    /**
+     * 直到回收前才会触发
+     * @param outState
+     * @param outPersistentState
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -54,7 +65,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        OnClickView(v);
+        if (isValidActivity())
+            OnClickView(v);
     }
 
     protected abstract void OnClickView(View v);
