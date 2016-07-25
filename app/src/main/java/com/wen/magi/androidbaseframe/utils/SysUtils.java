@@ -20,6 +20,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.wen.magi.androidbaseframe.managers.AppManager;
+import com.wen.magi.androidbaseframe.managers.AppSessionManager;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -329,25 +330,25 @@ public class SysUtils {
      *
      * @return
      */
-    public static int getNetWorkType() {
+    public static AppSessionManager.NetWorkType getNetWorkType() {
         Context con = AppManager.getApplicationContext();
         ConnectivityManager conn = (ConnectivityManager) con
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (conn == null)
-            return NETWORK_TYPE_NULL;
+            return AppSessionManager.NetWorkType.NETWORK_TYPE_NULL;
         NetworkInfo info = conn.getActiveNetworkInfo();
         if (info == null)
-            return NETWORK_TYPE_NULL;
+            return AppSessionManager.NetWorkType.NETWORK_TYPE_NULL;
         String type = info.getTypeName();
         if ("wifi".equals(type) || "WIFI".equals(type))
-            return NETWORK_TYPE_WIFI;
+            return AppSessionManager.NetWorkType.NETWORK_TYPE_WIFI;
         else if ("mobile".equals(type) || "MOBILE".equals(type)) {
             String apn = info.getExtraInfo();
             if (apn.contains("wap") && apn != null)
-                return NETWORK_TYPE_WAP;
+                return AppSessionManager.NetWorkType.NETWORK_TYPE_WAP;
             else
-                return NETWORK_TYPE_NET;
+                return AppSessionManager.NetWorkType.NETWORK_TYPE_NET;
         }
-        return NETWORK_TYPE_NULL;
+        return AppSessionManager.NetWorkType.NETWORK_TYPE_NULL;
     }
 }

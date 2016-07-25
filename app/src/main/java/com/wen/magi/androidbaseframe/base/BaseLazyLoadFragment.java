@@ -115,4 +115,20 @@ public abstract class BaseLazyLoadFragment extends BaseFragment {
     protected View createInvisibleView() {
         return null;
     }
+
+    @Override
+    public void onClick(View v) {
+        if (!isValidActivity()) {
+            return;
+        }
+
+        OnClickView(v);
+    }
+
+    /**
+     * 子类必须复写，代替onClick事件
+     *
+     * @param v 目标View
+     */
+    protected abstract void OnClickView(View v);
 }

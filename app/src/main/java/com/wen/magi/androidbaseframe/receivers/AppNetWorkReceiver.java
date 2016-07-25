@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import com.wen.magi.androidbaseframe.managers.AppManager;
 import com.wen.magi.androidbaseframe.managers.AppSessionManager;
-import com.wen.magi.androidbaseframe.utils.LogUtils;
 import com.wen.magi.androidbaseframe.utils.SysUtils;
 import com.wen.magi.androidbaseframe.utils.WebUtils;
 
@@ -16,16 +15,28 @@ import com.wen.magi.androidbaseframe.utils.WebUtils;
  * email: magiwen@126.com.
  */
 
-
+/**
+ * BroadcastReceiver：
+ * <p/>
+ * 网络状况的实时监听（onLine：offLine），网络类型的实时监听（NetworkType）
+ */
 public class AppNetWorkReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        if (AppSessionManager.getSessionManager() == null)
+        AppSessionManager sessionManager = AppSessionManager.getSessionManager();
+        if (sessionManager == null)
             return;
+
         boolean isNetWorkConnected = WebUtils.isNetworkConnected(AppManager.getApplicationContext());
-        LogUtils.e("wwwwwwww test git for cancel change before(after) checkout devgit --no-ff reset HEAD");
-        int netWorkType = SysUtils.getNetWorkType();
+        AppSessionManager.NetWorkType netWorkType = SysUtils.getNetWorkType();
+
+        if (netWorkType != sessionManager.getNetWorkType()) {
+            sessionManager.setNetWorkType(netWorkType);
+        }
+
+        if (isNetWorkConnected != sessionManager.isOnline()) {
+            sessionManager.setSessionMode(isNetWorkConnected ? AppSessionManager.SessionMode.OnLine : AppSessionManager.SessionMode.OffLine);
+        }
     }
 }
