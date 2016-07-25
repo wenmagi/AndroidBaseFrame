@@ -25,7 +25,7 @@ public class AppNetWorkReceiver extends BroadcastReceiver {
         if (AppSessionManager.getSessionManager() == null)
             return;
         boolean isNetWorkConnected = WebUtils.isNetworkConnected(AppManager.getApplicationContext());
-        LogUtils.e("wwwwwwww test git for cancel change before(after) addeddddd");
+        LogUtils.e("wwwwwwww test git for cancel change before(after) checkout dev");
         int netWorkType = SysUtils.getNetWorkType();
     }
 }
