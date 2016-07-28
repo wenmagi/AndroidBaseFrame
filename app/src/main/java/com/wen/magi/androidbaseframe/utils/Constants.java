@@ -5,6 +5,8 @@ package com.wen.magi.androidbaseframe.utils;
  */
 public class Constants {
 
+    //      WebActivity
+    public static final String ACTIVITY_WEB_KEY_INTENT_URL = "activity_intent_url";
     //    SysUtils
     public static final String LOG_TAG = "App";
     public static final String EXTERNAL_STORAGE_WRITABLE = "app_external_writable";

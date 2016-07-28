@@ -4,6 +4,8 @@ import com.wen.magi.androidbaseframe.eventbus.LoginEvent;
 import com.wen.magi.androidbaseframe.eventbus.LogoutEvent;
 import com.wen.magi.androidbaseframe.eventbus.NetConnChangeEvent;
 import com.wen.magi.androidbaseframe.eventbus.NetTypeChangeEvent;
+import com.wen.magi.androidbaseframe.utils.LogUtils;
+import com.wen.magi.androidbaseframe.utils.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,9 +33,9 @@ public class AppSessionManager {
     }
 
     private static AppSessionManager mManager;
-    private SessionMode sessionMode;
-    private SessionStatus sessionStatus;
-    private NetWorkType netWorkType;
+    private SessionMode sessionMode = SessionMode.OnLine;
+    private SessionStatus sessionStatus = SessionStatus.Logout;
+    private NetWorkType netWorkType = NetWorkType.NETWORK_TYPE_NET;
 
     public static AppSessionManager getSessionManager() {
 
@@ -50,6 +52,9 @@ public class AppSessionManager {
      * @param sessionMode
      */
     public void setSessionMode(SessionMode sessionMode) {
+        if (this.sessionMode == sessionMode)
+            return;
+
         this.sessionMode = sessionMode;
         NetConnChangeEvent event = new NetConnChangeEvent();
         event.setOnline(isOnline());
@@ -66,6 +71,8 @@ public class AppSessionManager {
      * @param sessionStatus
      */
     public void setSessionStatus(SessionStatus sessionStatus) {
+        if (this.sessionStatus == sessionStatus)
+            return;
         this.sessionStatus = sessionStatus;
         if (isLogin())
             EventBus.getDefault().post(new LoginEvent());
@@ -87,6 +94,9 @@ public class AppSessionManager {
      * @param netWorkType
      */
     public void setNetWorkType(NetWorkType netWorkType) {
+        if (this.netWorkType == netWorkType)
+            return;
+
         this.netWorkType = netWorkType;
         NetTypeChangeEvent event = new NetTypeChangeEvent();
         event.setNetWorkType(netWorkType);

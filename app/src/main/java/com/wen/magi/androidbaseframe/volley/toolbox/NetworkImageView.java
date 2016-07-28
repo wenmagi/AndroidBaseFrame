@@ -30,6 +30,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 import com.wen.magi.androidbaseframe.managers.AppManager;
+import com.wen.magi.androidbaseframe.managers.AppSessionManager;
 import com.wen.magi.androidbaseframe.managers.AppSettingsManager;
 import com.wen.magi.androidbaseframe.utils.SysUtils;
 import com.wen.magi.androidbaseframe.volley.VolleyError;
@@ -237,7 +238,7 @@ public class NetworkImageView extends ImageView {
         int maxHeight = wrapHeight ? 0 : height;
 
         if (AppSettingsManager.getPicQuality() == 0 &&
-                SysUtils.getNetWorkType() != SysUtils.NETWORK_TYPE_WIFI) {
+                SysUtils.getNetWorkType() != AppSessionManager.NetWorkType.NETWORK_TYPE_WIFI) {
             setDefaultImageOrNull();
             return;
         }

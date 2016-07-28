@@ -4,6 +4,7 @@ import com.wen.magi.androidbaseframe.utils.LangUtils;
 import com.wen.magi.androidbaseframe.utils.LogUtils;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Created by MVEN on 16/7/1.
@@ -26,7 +27,7 @@ public class algorithms {
         return instance;
     }
 
-    private algorithms(){
+    private algorithms() {
         testAlgorithms();
     }
 
@@ -35,6 +36,7 @@ public class algorithms {
         int b[] = {2, 3, 4, 5, 6, 6};
         NODE longer = create(a);
         NODE shorter = create(b);
+        LogUtils.e("wwwwwwww  556&34 %s  556yu32 %s", 556 & 34, 556 % 32);
         sum(longer, shorter, longer, a.length, b.length);
         printNODE(reverse(longer));
         quickSort(a, 0, a.length - 1);
@@ -44,7 +46,7 @@ public class algorithms {
     private void testTreeNode() {
         algorithms.TREENODE a = new algorithms.TREENODE();
         a.data = 3;
-        a.left = a.right=null;
+        a.left = a.right = null;
         algorithms.TREENODE b = new algorithms.TREENODE();
         b.data = -1;
         b.left = a;
@@ -176,6 +178,14 @@ public class algorithms {
         LogUtils.e("wwwwwwwwww print %s", aaa);
     }
 
+    public static void printTREENODE(TREENODE node) {
+        String aaa = "";
+        while (node != null) {
+            aaa += node.data;
+        }
+        LogUtils.e("wwwwwwwwww print %s", aaa);
+    }
+
     /**
      * 链表 end
      */
@@ -301,6 +311,31 @@ public class algorithms {
         int val = leftMaxDistance + rightMaxDistance + 1;
         LangUtils.max(val, max_distance);
         return LangUtils.max(leftMaxDistance, rightMaxDistance) + 1;
+    }
+
+    //前序遍历的递归实现
+    public static void preLoopTree(TREENODE head) {
+        if (head != null) {
+            printTREENODE(head);
+            preLoopTree(head.left);
+            preLoopTree(head.right);
+        }
+    }
+
+    //前序遍历，非递归实现
+    public static void preLoopTreeStack(Stack<TREENODE> stack, TREENODE head) {
+        if (head == null)
+            return;
+
+        while (head != null && stack.size() > 0) {
+
+            while (head != null) {
+                printTREENODE(head);
+                stack.add(head);
+                head = head.left;
+            }
+            head = stack.pop().right;
+        }
     }
 
     private void test() {

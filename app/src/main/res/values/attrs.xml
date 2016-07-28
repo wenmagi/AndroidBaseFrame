@@ -29,5 +29,8 @@
         <attr name="right_bottom_text_color" format="reference|color" />
         <attr name="right_bottom_text_marginTop" format="dimension|reference" />
     </declare-styleable>
+    <declare-styleable name="Leans45DegreeView">
+        <attr name="leans_height" format="dimension|reference" />
+    </declare-styleable>
 
 </resources>

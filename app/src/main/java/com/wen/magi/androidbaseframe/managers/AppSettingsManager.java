@@ -20,6 +20,7 @@ public class AppSettingsManager {
 
     /**
      * 非wifi流量，查看图片的质量，默认小图
+     *
      * 0:不看图  1:原图  2:小图
      */
     private static int picQuality = 2;

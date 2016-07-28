@@ -7,4 +7,12 @@ import java.io.Serializable;
  */
 public class BaseBundleParams implements Serializable {
     public static final String PARAM_SKEY = "params_key";
+
+    /**
+     * FROM，TARGET
+     * 用来纪录跳转路径
+     */
+    public static final String FROM = "from_component";
+
+    public static final String TARGET = "target_component";
 }

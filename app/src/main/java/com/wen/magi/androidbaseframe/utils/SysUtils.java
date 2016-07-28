@@ -46,11 +46,6 @@ public class SysUtils {
     public static String mUniquePsuedoID;
     public static String APP_VERSION_NAME;
 
-    public static final int NETWORK_TYPE_NULL = 0;
-    public static final int NETWORK_TYPE_WIFI = 1;
-    public static final int NETWORK_TYPE_WAP = 2;
-    public static final int NETWORK_TYPE_NET = 3;
-
     private SysUtils() {
     }
 

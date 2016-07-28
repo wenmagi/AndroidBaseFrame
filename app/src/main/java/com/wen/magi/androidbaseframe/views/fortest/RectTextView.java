@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -30,7 +31,7 @@ import com.wen.magi.androidbaseframe.utils.SysUtils;
  */
 
 
-public class RectTextView extends View {
+public class RectTextView extends View implements View.OnClickListener {
 
     private Drawable drawable;
     private float drawableHeight;
@@ -98,7 +99,7 @@ public class RectTextView extends View {
         rBottomTextSize = typedArray.getDimension(R.styleable.RectTextView_right_bottom_text_size, context.getResources().getDimension(R.dimen.default_textSize));
         rBottomTextMarginTop = typedArray.getDimension(R.styleable.RectTextView_right_bottom_text_marginTop, context.getResources().getDimension(R.dimen.bitmap_default_margin));
         typedArray.recycle();
-
+        setOnClickListener(this);
         initTools();
 
     }
@@ -178,6 +179,18 @@ public class RectTextView extends View {
 
         setMeasuredDimension(width, height);
     }
+    //设置一个3位数组。需要点击几次，就设置一个几位的数组
+    long[] mHits = new long[3];
 
-
+    @Override
+    public void onClick(View v) {
+        //复制数组的元素从第1个位置开始，目标地址是第0个位置，复制的长度为数组长度-1
+        System.arraycopy(mHits, 1, mHits, 0, mHits.length-1);
+        //给数组最后一个位置赋值
+        mHits[mHits.length-1] = SystemClock.uptimeMillis();
+        //判断数组第一个位置的时间与当前时间的差是否小于500毫秒，假如小于的话，就认为是多次点击事件。
+        if (mHits[0] >= (SystemClock.uptimeMillis()-500)) {
+            System.out.println("---------------------点击了三次----------------------------");
+        }
+    }
 }

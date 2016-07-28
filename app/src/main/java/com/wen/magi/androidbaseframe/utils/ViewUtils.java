@@ -17,6 +17,7 @@ import android.view.Display;
 import android.view.TouchDelegate;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.wen.magi.androidbaseframe.managers.AppManager;
 
@@ -238,8 +239,8 @@ public class ViewUtils {
      */
     public static float[] getTextWH(Paint paint, String str) {
         float a[] = new float[2];
-        a[0] = getTextWidth(paint,str);
-        a[1] = getTextHeight(paint,str);
+        a[0] = getTextWidth(paint, str);
+        a[1] = getTextHeight(paint, str);
         return a;
     }
 
@@ -251,22 +252,69 @@ public class ViewUtils {
      * @return
      */
     public static float getTextHeight(Paint paint, String str) {
-        if(paint==null|| TextUtils.isEmpty(str))
+        if (paint == null || TextUtils.isEmpty(str))
             return 0;
         Paint.FontMetrics metrics = paint.getFontMetrics();
         return (int) Math.ceil(metrics.descent - metrics.top) + 2;
     }
 
     /**
-     * 或租文字的宽度
+     * 获取文字的宽度
      *
      * @param paint
      * @param str
      * @return
      */
-    public static float getTextWidth(Paint paint, String str){
-        if(paint==null|| TextUtils.isEmpty(str))
+    public static float getTextWidth(Paint paint, String str) {
+        if (paint == null || TextUtils.isEmpty(str))
             return 0;
         return paint.measureText(str);
+    }
+
+    private static Toast toast;
+
+    /**
+     * 展示文字Toast
+     *
+     * @param context
+     * @param toastStr
+     */
+    public static void showToast(Context context, String toastStr) {
+        showToast(context, toastStr, Toast.LENGTH_LONG);
+    }
+
+    /**
+     * 展示文字Toast
+     *
+     * @param context
+     * @param toastStr
+     * @param duration
+     */
+    public static void showToast(final Context context, final String toastStr, final int duration) {
+        if (isInMainThread()) {
+            showToastImpl(context, toastStr, duration);
+        } else {
+            runInHandlerThread(new Runnable() {
+                @Override
+                public void run() {
+                    showToastImpl(context, toastStr, duration);
+                }
+            });
+        }
+    }
+
+    /**
+     * 展示文字Toast的实现,避免多次点击生成多个Toast对象
+     *
+     * @param context
+     * @param toastStr
+     */
+    private static void showToastImpl(Context context, String toastStr, int duration) {
+        if (toast == null) {
+            toast = Toast.makeText(context, toastStr, duration);
+        } else {
+            toast.setText(toastStr);
+        }
+        toast.show();
     }
 }

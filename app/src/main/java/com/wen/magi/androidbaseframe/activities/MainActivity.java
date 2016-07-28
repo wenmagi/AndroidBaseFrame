@@ -1,9 +1,13 @@
 package com.wen.magi.androidbaseframe.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewStub;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wen.magi.androidbaseframe.R;
@@ -12,7 +16,9 @@ import com.wen.magi.androidbaseframe.annotations.From;
 import com.wen.magi.androidbaseframe.base.BaseActivity;
 import com.wen.magi.androidbaseframe.interfaces.home.OneFragment;
 import com.wen.magi.androidbaseframe.utils.LogUtils;
+import com.wen.magi.androidbaseframe.utils.ViewUtils;
 import com.wen.magi.androidbaseframe.views.BounceListView;
+import com.wen.magi.androidbaseframe.web.WebActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,34 +31,50 @@ import static com.wen.magi.androidbaseframe.algorithms.printNODE;
 import static com.wen.magi.androidbaseframe.algorithms.quickSort;
 import static com.wen.magi.androidbaseframe.algorithms.reverse;
 import static com.wen.magi.androidbaseframe.algorithms.sum;
+import static com.wen.magi.androidbaseframe.utils.Constants.ACTIVITY_WEB_KEY_INTENT_URL;
 
 public class MainActivity extends BaseActivity {
 
     @From(R.id.main_tv)
     private TextView mainTv;
 
+    @From(R.id.main_tv1)
+    private TextView mainTv1;
+
     @From(R.id.list_view)
     private BounceListView listView;
+
+    @From(R.id.stub_id1)
+    private ViewStub viewStub;
+
+    private View linearLayout;
+
     private HashMap<String, Objects> hashMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (mainTv != null)
-            mainTv.setText("wenwenwen");
         mainTv.setOnClickListener(this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.container, new OneFragment()).commit();
-//        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getDummyData(30)));
+        mainTv1.setOnClickListener(this);
     }
 
     @Override
     protected void OnClickView(View v) {
         if (v == mainTv) {
             startActivity(DialogTestActivity.class);
+        } else if (v == mainTv1) {
+//            viewStub.setVisibility(View.VISIBLE);
+            if (linearLayout != null)
+                return;
+            linearLayout = viewStub.inflate();
+            linearLayout.setBackgroundResource(R.color.red_btn_bg_color);
+            linearLayout.setOnClickListener(this);
+            viewStub.setBackgroundResource(R.color.blue_btn_bg_color);
+        }else if(v == linearLayout){
+            Intent intent = new Intent(this, WebActivity.class);
+            intent.putExtra(ACTIVITY_WEB_KEY_INTENT_URL,"https://www.baidu.com");
+            startActivity(intent);
         }
     }
 

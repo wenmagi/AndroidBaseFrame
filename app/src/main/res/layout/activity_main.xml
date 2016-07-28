@@ -12,7 +12,8 @@
         android:id="@+id/main_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textSize="40dp"
+        android:text="come on, click me!" />
     <!--移除TextView上下的default padding  android:includeFontPadding-->
     <TextView
         android:id="@+id/main_tv1"
@@ -20,27 +21,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/main_tv"
         android:includeFontPadding="false"
-        android:text="Hello World!"
+        android:text="click me too!"
         android:textSize="55dp" />
 
-    <com.wen.magi.androidbaseframe.views.fortest.RectTextView
-        android:id="@+id/zidingyi"
+    <ViewStub
+        android:id="@+id/stub_id1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inflatedId="@+id/stub_id"
         android:layout_below="@id/main_tv1"
-        android:background="@color/alpha_30_percent_black"
-        app:bitmap_src="@drawable/custom_img"
-        app:right_top_text="@string/right_top_text"
-        app:right_bottom_text="@string/right_top_text"
-        app:text_margin="10dp"
-        app:bitmap_height="50dp"/>
-
-    <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/zidingyi"
-        android:orientation="vertical" />
+        android:layout="@layout/test_for_viewstub" />
 
     <com.wen.magi.androidbaseframe.views.BounceListView
         android:id="@+id/list_view"
