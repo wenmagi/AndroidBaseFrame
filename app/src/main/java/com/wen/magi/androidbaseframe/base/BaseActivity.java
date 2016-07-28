@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.wen.magi.androidbaseframe.R;
 import com.wen.magi.androidbaseframe.base.net.BaseRequestParams;
 import com.wen.magi.androidbaseframe.base.net.EService;
 import com.wen.magi.androidbaseframe.base.net.ARequest;
@@ -25,10 +26,21 @@ import org.greenrobot.eventbus.EventBus;
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, UrlRequest.RequestDelegate {
 
+    /**
+     *
+     */
+    public enum TRANSITION {
+        LEFT_IN,
+        TOP_IN,
+        RIGHT_IN,
+        BOTTOM_IN
+    }
+
+    protected TRANSITION transition = TRANSITION.LEFT_IN;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtils.e("wwwwwwwwwww onCreate");
         initProperties();
         initView();
     }
@@ -50,21 +62,27 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     /**
-     * 点击home键，跳转其他页面，横竖屏切换
+     * 点击home键，跳转其他页面，横竖屏切换,按下电源键
+     * <p/>
      * 均可触发
      *
      * @param outState
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        LogUtils.e("wwwwwwwwwww onSaveInstanceState %s",this.getLocalClassName());
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * 不一定与{@link #onSaveInstanceState(Bundle)}成对出现
+     * <p/>
+     * #BaseActivity 确定被销毁后，才可触发
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        LogUtils.e("wwwwwwwwwww onRestoreInstanceState");
     }
 
     @Override
@@ -84,6 +102,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     private void initView() {
         RelativeLayout contentView = new RelativeLayout(this);
         setContentView(contentView);
+    }
+
+    protected void setTransition(TRANSITION transition) {
+        this.transition = transition;
     }
 
     /**

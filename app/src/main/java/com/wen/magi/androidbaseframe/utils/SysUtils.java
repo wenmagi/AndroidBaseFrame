@@ -346,4 +346,18 @@ public class SysUtils {
         }
         return AppSessionManager.NetWorkType.NETWORK_TYPE_NULL;
     }
+
+
+    /**
+     * 判断当前SDK版本是否大于目标版本
+     *
+     * @param targetSDK 目标版本
+     * @return boolean
+     */
+    public static boolean nowSDKINTBigger(int targetSDK) {
+        if (Build.VERSION.SDK_INT >= targetSDK)
+            return true;
+        else
+            return false;
+    }
 }

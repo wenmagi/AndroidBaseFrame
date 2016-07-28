@@ -36,7 +36,6 @@ public class algorithms {
         int b[] = {2, 3, 4, 5, 6, 6};
         NODE longer = create(a);
         NODE shorter = create(b);
-        LogUtils.e("wwwwwwww  556&34 %s  556yu32 %s", 556 & 34, 556 % 32);
         sum(longer, shorter, longer, a.length, b.length);
         printNODE(reverse(longer));
         quickSort(a, 0, a.length - 1);
@@ -175,7 +174,7 @@ public class algorithms {
             aaa += node.data;
             node = node.next;
         }
-        LogUtils.e("wwwwwwwwww print %s", aaa);
+//        LogUtils.e("wwwwwwwwww print %s", aaa);
     }
 
     public static void printTREENODE(TREENODE node) {
@@ -183,7 +182,7 @@ public class algorithms {
         while (node != null) {
             aaa += node.data;
         }
-        LogUtils.e("wwwwwwwwww print %s", aaa);
+//        LogUtils.e("wwwwwwwwww print %s", aaa);
     }
 
     /**

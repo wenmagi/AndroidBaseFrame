@@ -1,6 +1,8 @@
 package com.wen.magi.androidbaseframe.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +18,7 @@ import com.wen.magi.androidbaseframe.annotations.From;
 import com.wen.magi.androidbaseframe.base.BaseActivity;
 import com.wen.magi.androidbaseframe.interfaces.home.OneFragment;
 import com.wen.magi.androidbaseframe.utils.LogUtils;
+import com.wen.magi.androidbaseframe.utils.SysUtils;
 import com.wen.magi.androidbaseframe.utils.ViewUtils;
 import com.wen.magi.androidbaseframe.views.BounceListView;
 import com.wen.magi.androidbaseframe.web.WebActivity;
@@ -62,7 +65,14 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void OnClickView(View v) {
         if (v == mainTv) {
-            startActivity(DialogTestActivity.class);
+            Intent intent = new Intent(this, DialogTestActivity.class);
+//            startActivity(DialogTestActivity.class);
+            if (SysUtils.nowSDKINTBigger(21)) {
+                startActivity(intent,
+                        ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, mainTv, "shareNames").toBundle());
+            } else
+                startActivity(intent);
+
         } else if (v == mainTv1) {
 //            viewStub.setVisibility(View.VISIBLE);
             if (linearLayout != null)
@@ -71,9 +81,9 @@ public class MainActivity extends BaseActivity {
             linearLayout.setBackgroundResource(R.color.red_btn_bg_color);
             linearLayout.setOnClickListener(this);
             viewStub.setBackgroundResource(R.color.blue_btn_bg_color);
-        }else if(v == linearLayout){
+        } else if (v == linearLayout) {
             Intent intent = new Intent(this, WebActivity.class);
-            intent.putExtra(ACTIVITY_WEB_KEY_INTENT_URL,"https://www.baidu.com");
+            intent.putExtra(ACTIVITY_WEB_KEY_INTENT_URL, "https://www.baidu.com");
             startActivity(intent);
         }
     }
