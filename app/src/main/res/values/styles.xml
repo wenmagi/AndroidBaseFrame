@@ -37,7 +37,6 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:scrollbarThumbVertical">@drawable/</item>
     </style>
 
     <style name="dialog_bkg" parent="Base.Theme.AppCompat.Dialog">
