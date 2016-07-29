@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.wen.magi.baseframe.R;
 import com.wen.magi.baseframe.annotations.From;
 import com.wen.magi.baseframe.base.BaseActivity;
+import com.wen.magi.baseframe.utils.LogUtils;
 import com.wen.magi.baseframe.utils.SysUtils;
 import com.wen.magi.baseframe.views.BounceListView;
 import com.wen.magi.baseframe.web.WebActivity;
@@ -44,6 +45,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
+        LogUtils.e("wwwwwwwww");
     }
 
     @Override
