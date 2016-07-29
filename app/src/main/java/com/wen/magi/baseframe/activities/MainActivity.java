@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
-        LogUtils.e("wwwwwwwww");
+        LogUtils.e("wwwwwwwwweeeee");
     }
 
     @Override
