@@ -1,5 +1,7 @@
-package com.wen.magi.baseframe.base.net;
+package com.wen.magi.baseframe.utils;
 
+import com.wen.magi.baseframe.base.net.BaseRequestParams;
+import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.utils.LangUtils;
 import com.wen.magi.baseframe.utils.StringUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
@@ -16,7 +18,7 @@ import java.util.Map;
  */
 
 
-public class ARequest {
+public class ARequestHelper {
 
     public static void start(UrlRequest.RequestDelegate delegate, EService service, BaseRequestParams params) {
 

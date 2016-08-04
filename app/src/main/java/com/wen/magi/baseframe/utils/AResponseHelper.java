@@ -1,5 +1,6 @@
-package com.wen.magi.baseframe.base.net;
+package com.wen.magi.baseframe.utils;
 
+import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.utils.LangUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 
@@ -10,9 +11,9 @@ import com.wen.magi.baseframe.web.UrlRequest;
  */
 
 
-public class AResponse {
+public class AResponseHelper {
 
-    public BaseResultParams parseResultParams(UrlRequest request, int statusCode) {
+    public static BaseResultParams parseResultParams(UrlRequest request, int statusCode) {
         BaseResultParams result = null;
         if (request == null || LangUtils.isEmpty(request.getStringData()))
             return null;

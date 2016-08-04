@@ -1,4 +1,4 @@
-package com.wen.magi.baseframe.interfaces.home;
+package com.wen.magi.baseframe.fragments.home;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wen.magi.baseframe.R;
-import com.wen.magi.baseframe.base.BaseFragment;
 import com.wen.magi.baseframe.base.BaseLazyLoadFragment;
 
 /**

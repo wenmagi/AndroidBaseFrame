@@ -14,9 +14,9 @@ import java.util.List;
  */
 
 
-public class TestAdapter extends BaseListAdapter<String> {
+public class ATestAdapter extends BaseListAdapter<String> {
 
-    public TestAdapter(Context context, List<String> datas) {
+    public ATestAdapter(Context context, List<String> datas) {
         super(context, datas);
     }
 
