@@ -2,6 +2,7 @@ package com.wen.magi.baseframe.utils;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 
@@ -330,6 +331,28 @@ public class IOUtils {
             close(outputStream);
             close(input);
             releaseBytes(buf);
+        }
+    }
+
+    /**
+     * 把图片保存到文件中
+     *
+     * @param bm
+     * @param localFile
+     * @param format
+     * @param quality
+     */
+    public static void saveBitmap(@NonNull Bitmap bm, @NonNull File localFile,
+                                  Bitmap.CompressFormat format, int quality) {
+        FileOutputStream output = null;
+        try {
+            output = new FileOutputStream(localFile);
+            bm.compress(format, quality, output);
+            output.flush();
+        } catch (Exception e) {
+            LogUtils.w(e, "Failed to save bitmap");
+        } finally {
+            close(output);
         }
     }
 }

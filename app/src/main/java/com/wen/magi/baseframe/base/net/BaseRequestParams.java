@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 
 public abstract class BaseRequestParams implements Serializable {
+    private static final long serialVersionUID = -2245239887458887343L;
     /**
      * 请求参数对象转换为HashMap
      */
@@ -27,8 +28,13 @@ public abstract class BaseRequestParams implements Serializable {
     public static final String URL_PARAMS = "url_params";
 
     public HashMap<String, Object> getRequestParams() {
+
+        addRequestParams();
         return params;
     }
+
+    protected abstract void addRequestParams();
+
 
     /**
      * 添加url拼接参数，注意顺序
@@ -48,7 +54,7 @@ public abstract class BaseRequestParams implements Serializable {
      * @param key   请求参数key值
      * @param value 请求参数value值
      */
-    public void addParams(String key, Object value) {
+    public void addParam(String key, Object value) {
         if (LangUtils.isEmpty(key))
             return;
         if (params == null)

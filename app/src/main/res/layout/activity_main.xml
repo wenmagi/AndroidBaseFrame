@@ -30,11 +30,14 @@
         android:inflatedId="@+id/stub_id"
         android:layout="@layout/test_for_viewstub" />
 
-    <com.wen.magi.androidbaseframe.views.BounceListView
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/main_tv1"
-        android:scrollbars="none"
-        android:visibility="gone" />
+    <com.wen.magi.baseframe.views.fortest.CircleAnimateView
+        android:id="@+id/animateview"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_below="@id/main_tv1" />
+
+    <!--<com.wen.magi.baseframe.views.fortest.TestSurfaceView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/animateview" />-->
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.wen.magi.baseframe.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,9 @@ import java.util.Date;
  */
 
 
-public class AppUser {
+public class AppUser implements Serializable{
+
+    private static final long serialVersionUID = -8084096905892312942L;
 
     /*用户ID*/
     public long userID;

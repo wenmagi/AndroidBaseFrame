@@ -15,6 +15,10 @@ import com.wen.magi.baseframe.utils.Constants;
 
 /**
  * 仅仅用来展示的页面，无任何逻辑
+ *
+ * 防止多个无用activity的创建
+ *
+ * 传入{@link com.wen.magi.baseframe.utils.Constants} BUNDLE_JUMP_TO_BASE_JUST_SHOW_ACTIVITY_INFLATE_ID
  */
 
 public class JustShowActivity extends BaseActivity {

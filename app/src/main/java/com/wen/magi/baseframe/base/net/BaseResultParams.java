@@ -10,12 +10,14 @@ import java.io.Serializable;
 
 
 public class BaseResultParams implements Serializable {
+
+    private static final long serialVersionUID = 1265758314834003579L;
     /**
      * 后端返回的code
      */
-    int code;
+    public int code;
     /**
      * 后端返回的msg
      */
-    String msg;
+    public String msg;
 }

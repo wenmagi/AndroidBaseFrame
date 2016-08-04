@@ -25,6 +25,7 @@ public class AppManager {
     public static void initInMainThread(Context context) {
         applicationContext = context;
         SysUtils.initialize(context);
+        RequestQueueManager.initialize(context);
         algorithms.getInstance();
     }
 
@@ -37,6 +38,9 @@ public class AppManager {
         return new AppUser();
     }
 
+    /**
+     * 退出当前用户
+     */
     public static void logout() {
         clearPreferenceButKeep();
     }
@@ -46,5 +50,12 @@ public class AppManager {
         keepKeys.add(Constants.SETTINGS_IS_PUSHMESSAGE_ON);
         keepKeys.add(Constants.SETTINGS_PIC_QUALITY);
         IOUtils.clearPreferencesKeep(keepKeys);
+    }
+
+    /**
+     * 应用退出调用该方法
+     */
+    public static void destroy() {
+        RequestQueueManager.destroy();
     }
 }

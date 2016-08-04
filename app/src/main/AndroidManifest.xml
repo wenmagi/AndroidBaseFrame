@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".activities.DialogTestActivity"></activity>
         <activity android:name=".web.WebActivity"></activity>
+        <activity android:name=".activities.JustShowActivity"/>
 
         <receiver android:name=".receivers.AppNetWorkReceiver">
             <intent-filter>

@@ -7,9 +7,17 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.wen.magi.baseframe.base.net.BaseRequestParams;
+import com.wen.magi.baseframe.base.net.BaseResultParams;
+import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.bundles.BaseBundleParams;
 import com.wen.magi.baseframe.eventbus.DetachAllFragmentEvent;
+import com.wen.magi.baseframe.managers.RequestQueueManager;
+import com.wen.magi.baseframe.utils.ARequestHelper;
+import com.wen.magi.baseframe.utils.AResponseHelper;
 import com.wen.magi.baseframe.utils.InjectUtils;
+import com.wen.magi.baseframe.utils.ViewUtils;
+import com.wen.magi.baseframe.web.UrlRequest;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,12 +29,14 @@ import org.greenrobot.eventbus.ThreadMode;
  * email: magiwen@126.com.
  */
 
-public abstract class BaseFragment extends Fragment implements OnClickListener {
+public abstract class BaseFragment extends Fragment implements OnClickListener, UrlRequest.RequestDelegate {
 
     /**
      * 该fragment attach的activity
      */
     protected Activity activity;
+    private String className;
+    private boolean hasRequest = false;
 
     /**
      * 初始化activity，子Fragment代替{@link #getActivity()}方法
@@ -47,6 +57,10 @@ public abstract class BaseFragment extends Fragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getClass() != null)
+            className = getClass().getSimpleName();
+
         EventBus.getDefault().register(this);
     }
 
@@ -80,6 +94,9 @@ public abstract class BaseFragment extends Fragment implements OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
+        if (hasRequest)
+            RequestQueueManager.cancelTag(className);
     }
 
     @Override
@@ -148,15 +165,142 @@ public abstract class BaseFragment extends Fragment implements OnClickListener {
         OnClickView(v);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFinishAllFragmentEvent(DetachAllFragmentEvent event) {
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+    }
+
+
+    /**
+     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
+     *
+     * @param service 后端服务
+     */
+    protected void startRequest(EService service) {
+        startRequest(service, null);
+    }
+
+    /**
+     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
+     *
+     * @param service 后端服务
+     * @param param   HTTP请求参数
+     */
+    protected void startRequest(EService service, BaseRequestParams param) {
+        startRequest(service, param, 0);
+    }
+
+    /**
+     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
+     *
+     * @param service     后端服务
+     * @param param       HTTP请求参数
+     * @param requestCode 该请求的编号
+     */
+    protected void startRequest(EService service, BaseRequestParams param, int requestCode) {
+        String tag = null;
+        if (getClass() != null) {
+            tag = getClass().getSimpleName();
+        }
+        startRequest(service, param, requestCode, tag);
+    }
+
+    /**
+     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
+     *
+     * @param service     后端服务
+     * @param param       HTTP请求参数
+     * @param requestCode 该请求的编号
+     * @param requestTag  该请求的tag
+     */
+    protected void startRequest(EService service, BaseRequestParams param, int requestCode, String requestTag) {
+        if (service == null || !isValidActivity()) {
+            return;
+        }
+
+        hasRequest = true;
+        ARequestHelper.start(className, this, service, param);
+    }
+
+
+    @Override
+    public void requestFailed(final UrlRequest request, final int statusCode, final String errorString) {
+        if (!isValidActivity())
+            return;
+
+        ViewUtils.runInHandlerThread(new Runnable() {
+            @Override
+            public void run() {
+                if (errorString == null) {
+                    onNetError(request, statusCode);
+                } else {
+                    onResponseError(request, statusCode, errorString);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void requestFinished(final UrlRequest request) {
+        if (!isValidActivity() || request == null)
+            return;
+
+        final BaseResultParams resultParams = AResponseHelper.parseResultParams(request);
+
+        if (resultParams == null)
+            return;
+
+        if (!ViewUtils.isInMainThread())
+            ViewUtils.runInHandlerThread(new Runnable() {
+                @Override
+                public void run() {
+                    onResponseSuccess(request, resultParams);
+                }
+            });
+        else
+            onResponseSuccess(request, resultParams);
+    }
+
+    /**
+     * 子类可复写的方法
+     *
+     * @param request
+     * @param resultParams
+     */
+
+    /**
+     * 网络访问成功 返回数据
+     *
+     * @param request      网络请求
+     * @param resultParams 返回数据对象
+     */
+    protected void onResponseSuccess(UrlRequest request, BaseResultParams resultParams) {
+    }
+
+    /**
+     * 网络访问成功，但服务器未返回正确数据，返回errorString
+     *
+     * @param request
+     * @param statusCode
+     * @param errorString
+     */
+    protected void onResponseError(UrlRequest request, int statusCode, String errorString) {
+    }
+
+    /**
+     * 网络访问失败
+     *
+     * @param request
+     * @param statusCode
+     */
+    protected void onNetError(UrlRequest request, int statusCode) {
+    }
+
+
     /**
      * 子类必须复写，代替onClick事件
      *
      * @param v 目标View
      */
     protected abstract void OnClickView(View v);
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFinishAllFragmentEvent(DetachAllFragmentEvent event) {
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-    }
 }

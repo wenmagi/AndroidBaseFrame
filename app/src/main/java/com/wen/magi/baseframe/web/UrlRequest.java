@@ -9,6 +9,7 @@ import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.wen.magi.baseframe.R;
+import com.wen.magi.baseframe.base.net.NetworkParams;
 import com.wen.magi.baseframe.managers.AppManager;
 import com.wen.magi.baseframe.managers.AppSessionManager;
 import com.wen.magi.baseframe.managers.RequestQueueManager;
@@ -36,13 +37,36 @@ public class UrlRequest {
         void requestFinished(UrlRequest request);
     }
 
-
+    /**
+     * 统一格式，网络访问返回数据格式一律为:
+     * <p/>
+     * {
+     * "code": 0,
+     * "data": {}
+     * }
+     * <p/>
+     * data对应的数据才是我们需要的数据
+     * <p/>
+     * 如果请求错误，返回
+     * *{
+     * "code": 102,
+     * "msg": "无该用户"
+     * }
+     */
+    private static final String CODE_KEY = "code";
+    private static final String DATA_KEY = "data";
+    private static final String ERROR_KEY = "msg";
     private static final int MY_SOCKET_TIMEOUT_MS = 45 * 1000;
-
+    /**
+     * 访问成功时返回的code值
+     */
     public static final int REQUEST_SUCCESS_CODE = 0;
+
 
     private static String mURL;
     protected RequestDelegate mDelegate;
+    protected NetworkParams networkParams;
+
     private HashMap<String, String> mPostParams;
     private int mMethod = GET;
     private String mStringData;
@@ -62,23 +86,21 @@ public class UrlRequest {
             mURL = u.toString();
     }
 
+
+    public String getStringData() {
+        return mStringData;
+    }
+
     public void setDelegate(RequestDelegate delegate) {
         mDelegate = delegate;
     }
 
+    public void setNetWorkParams(NetworkParams params) {
+        networkParams = params;
+    }
 
-    private void fireDelegate(boolean result, int code, String errorString) {
-        RequestDelegate d = mDelegate;
-        if (!result) {
-            LogUtils.w("requst failed, url = %s code = %s", mURL, code);
-        }
-        if (d != null) {
-            if (result) {
-                d.requestFinished(this);
-            } else {
-                d.requestFailed(this, code, errorString);
-            }
-        }
+    public NetworkParams getNetworkParams() {
+        return networkParams;
     }
 
     public void addPostParams(String key, String value) {
@@ -88,12 +110,15 @@ public class UrlRequest {
         mPostParams.put(key, String.valueOf(value));
     }
 
+    /**
+     * 网络访问开启,将request加入网络访问队列
+     */
     public void start() {
         start(true);
     }
 
     public void start(boolean immediate) {
-        if (mPostParams != null || mPostParams.size() > 0) {
+        if (mPostParams != null && mPostParams.size() > 0) {
             mMethod = POST;
         }
 
@@ -106,9 +131,16 @@ public class UrlRequest {
         requestPriority.setPriority(immediate ? IMMEDIATE : NORMAL);
         requestPriority.setRetryPolicy(new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueueManager.addRequest(requestPriority);
+
+        if (networkParams != null)
+            RequestQueueManager.addRequest(requestPriority, networkParams.requestTag);
+        else
+            RequestQueueManager.addRequest(requestPriority);
     }
 
+    /**
+     * 网络请求失败回调类
+     */
     private Response.ErrorListener errorListener = new Response.ErrorListener() {
 
         @Override
@@ -122,6 +154,9 @@ public class UrlRequest {
         }
     };
 
+    /**
+     * 网络请求成功回调类
+     */
     private Response.Listener<String> succListener = new Response.Listener<String>() {
 
         @Override
@@ -134,9 +169,9 @@ public class UrlRequest {
 
             }
             if (json != null) {
-                int code = json.getIntValue("code");
-                String errorMsg = json.getString("msg");
-                mStringData = json.getString("data");
+                int code = json.getIntValue(CODE_KEY);
+                String errorMsg = json.getString(ERROR_KEY);
+                mStringData = json.getString(DATA_KEY);
                 if (LangUtils.isNotEmpty(errorMsg)) {
                     errorString = errorMsg;
                 }
@@ -161,7 +196,18 @@ public class UrlRequest {
         }
     };
 
-    public String getStringData() {
-        return mStringData;
+
+    private void fireDelegate(boolean result, int code, String errorString) {
+        RequestDelegate d = mDelegate;
+        if (!result) {
+            LogUtils.w("requst failed, url = %s code = %s", mURL, code);
+        }
+        if (d != null) {
+            if (result) {
+                d.requestFinished(this);
+            } else {
+                d.requestFailed(this, code, errorString);
+            }
+        }
     }
 }

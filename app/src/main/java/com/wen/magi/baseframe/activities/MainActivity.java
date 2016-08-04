@@ -10,8 +10,12 @@ import android.widget.TextView;
 import com.wen.magi.baseframe.R;
 import com.wen.magi.baseframe.annotations.From;
 import com.wen.magi.baseframe.base.BaseActivity;
+import com.wen.magi.baseframe.base.net.BaseResultParams;
+import com.wen.magi.baseframe.base.net.EService;
+import com.wen.magi.baseframe.models.net.request.ATestRequestParams;
+import com.wen.magi.baseframe.models.net.result.ATestResultParams;
 import com.wen.magi.baseframe.utils.SysUtils;
-import com.wen.magi.baseframe.views.BounceListView;
+import com.wen.magi.baseframe.web.UrlRequest;
 import com.wen.magi.baseframe.web.WebActivity;
 
 import java.util.ArrayList;
@@ -28,14 +32,12 @@ public class MainActivity extends BaseActivity {
     @From(R.id.main_tv1)
     private TextView mainTv1;
 
-    @From(R.id.list_view)
-    private BounceListView listView;
-
     @From(R.id.stub_id1)
     private ViewStub viewStub;
 
     private View linearLayout;
 
+    int i = 0;
     private HashMap<String, Objects> hashMap;
 
     @Override
@@ -44,6 +46,57 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
+
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        startRequest();
+        finish();
+    }
+
+    private void startRequest() {
+        ATestRequestParams request = new ATestRequestParams();
+        request.gymID = 12;
+        request.limit = 10;
+        request.nextOffset = i++;
+        startRequest(EService.TestRequest, request);
     }
 
     @Override
@@ -78,6 +131,22 @@ public class MainActivity extends BaseActivity {
             items.add("Item " + i);
         }
         return items;
+    }
+
+    @Override
+    protected void onResponseError(UrlRequest request, int code, String message) {
+        super.onResponseError(request, code, message);
+    }
+
+    @Override
+    protected void onNetError(UrlRequest request, int statusCode) {
+        super.onNetError(request, statusCode);
+    }
+
+    @Override
+    protected void onResponseSuccess(UrlRequest request, BaseResultParams data) {
+        super.onResponseSuccess(request, data);
+        ATestResultParams resultParams = (ATestResultParams) data;
     }
 
 }

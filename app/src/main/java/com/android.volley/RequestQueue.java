@@ -19,6 +19,8 @@ package com.android.volley;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.wen.magi.baseframe.utils.LogUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -187,6 +189,10 @@ public class RequestQueue {
                 mDispatchers[i].quit();
             }
         }
+    }
+
+    public int getSize() {
+        return mCurrentRequests.size();
     }
 
     /**

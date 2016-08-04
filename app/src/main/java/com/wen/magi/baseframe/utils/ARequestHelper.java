@@ -1,7 +1,9 @@
 package com.wen.magi.baseframe.utils;
 
+import com.android.volley.Network;
 import com.wen.magi.baseframe.base.net.BaseRequestParams;
 import com.wen.magi.baseframe.base.net.EService;
+import com.wen.magi.baseframe.base.net.NetworkParams;
 import com.wen.magi.baseframe.utils.LangUtils;
 import com.wen.magi.baseframe.utils.StringUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
@@ -20,7 +22,7 @@ import java.util.Map;
 
 public class ARequestHelper {
 
-    public static void start(UrlRequest.RequestDelegate delegate, EService service, BaseRequestParams params) {
+    public static void start(String clazzName, UrlRequest.RequestDelegate delegate, EService service, BaseRequestParams params) {
 
         if (delegate == null || service == null)
             return;
@@ -30,8 +32,16 @@ public class ARequestHelper {
             return;
 
         UrlRequest r = initUrlRequest(service, params, url);
+        r.setNetWorkParams(initNetworkParams(clazzName, service));
         r.setDelegate(delegate);
         r.start();
+    }
+
+    private static NetworkParams initNetworkParams(String clazz, EService service) {
+        NetworkParams networkParams = new NetworkParams();
+        networkParams.service = service;
+        networkParams.requestTag = clazz;
+        return networkParams;
     }
 
     private static UrlRequest initUrlRequest(EService service, BaseRequestParams params, String url) {
@@ -46,6 +56,7 @@ public class ARequestHelper {
                 url = StringUtils.format(url, args);
             param.remove(URL_PARAMS);
         }
+
         UrlRequest r;
         if (service.getUrlType() == EService.METHOD_OF_GET) {
             r = new UrlRequest(url, param);

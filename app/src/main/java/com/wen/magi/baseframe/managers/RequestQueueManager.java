@@ -29,27 +29,9 @@ public class RequestQueueManager {
     }
 
     public static void initialize(Context context) {
-        // mQueue = Volley.newRequestQueue(context);
-
         if (mQueue == null) {
-            // DefaultHttpClient httpclient = new DefaultHttpClient();
-            // // 非持久化存储(内存存储) BasicCookieStore | 持久化存储 PreferencesCookieStore
-            // CookieStore cookieStore = new PreferencesCookieStore(CardManager.getApplicationContext());
-            // httpclient.setCookieStore(cookieStore);
-            // HttpStack httpStack = new HttpClientStack(httpclient);
-            // Network network = new BasicNetwork(httpStack);
+            HttpStack stack = new HurlStack();
 
-            HttpStack stack = new HurlStack()/*{
-          @Override
-          protected HttpURLConnection createConnection(URL url) throws IOException {
-              HttpURLConnection connection = super.createConnection(url);
-              connection.setInstanceFollowRedirects(false);
-
-              return connection;
-          }
-      }*/;
-
-//      HttpStack stack = /*new HurlStack()*/new OkHttpStack(new OkHttpClient());
             Network network = new BasicNetwork(stack);
             mQueue =
                     new RequestQueue(new DiskBasedCache(AppCacheManager.getManager().getCacheDir()), network);
@@ -60,7 +42,6 @@ public class RequestQueueManager {
                     ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
             // Use 1/8th of the available memory for this memory cache.
             int cacheSize = 1024 * 1024 * memClass / 16;
-            LogUtils.d("cache size is %s", cacheSize);
             mImageLoader = new ImageLoader(mQueue, new BitmapLruCache(cacheSize));
         }
     }
@@ -102,11 +83,16 @@ public class RequestQueueManager {
     }
 
     public static void cancelAll() {
-        cancelAll(AppManager.getApplicationContext());
+        if (mQueue != null) {
+            mQueue.stop();
+            mQueue = null;
+        }
     }
 
+    /**
+     * 结束mQueue
+     */
     public static void destroy() {
-
         cancelAll();
         token = null;
         mImageLoader = null;
@@ -116,18 +102,19 @@ public class RequestQueueManager {
         token = null;
     }
 
-    public static void cancelAll(Object tag) {
+    /**
+     * 根据tag，取消队列中的网络访问
+     *
+     * @param tag
+     */
+    public static void cancelTag(Object tag) {
         if (mQueue != null) {
             mQueue.cancelAll(tag);
-            mQueue.stop();
-            mQueue = null;
         }
-
     }
 
     private static final String SET_COOKIE_KEY = "Set-Cookie";
     private static final String COOKIE_KEY = "Cookie";
-    // private static final String SESSION_COOKIE = "session";
     private static final String SESSION_TOKEN = "remember_token";
 
     /**
@@ -136,7 +123,6 @@ public class RequestQueueManager {
      * @param headers Response Headers.
      */
     public static void checkSessionCookie(Map<String, String> headers) {
-        LogUtils.d("checkSessionCookie headers %s", headers);
         if (headers.containsKey(SET_COOKIE_KEY)
                 && headers.get(SET_COOKIE_KEY).startsWith(SESSION_TOKEN)) {
             String cookie = headers.get(SET_COOKIE_KEY);
@@ -168,11 +154,11 @@ public class RequestQueueManager {
      * @param headers
      */
     public static void addSessionCookie(Map<String, String> headers) {
+        //TODO 使用小熊快跑接口测试用
         if (token == null) {
             token = IOUtils.getPreferenceValue(SESSION_TOKEN);
         }
-        String sessionId = token;// PreferenceManager.getDefaultSharedPreferences(CardManager.getApplicationContext()).getString(SESSION_COOKIE,
-        // "");
+        String sessionId = /*token*/"13521125097_jRlEtx|10dada62b8f329ecf15ddb5c4f2b4756f3e231e9";
         if (sessionId.length() > 0) {
             StringBuilder builder = new StringBuilder();
             builder.append(SESSION_TOKEN);
@@ -184,6 +170,5 @@ public class RequestQueueManager {
             }
             headers.put(COOKIE_KEY, builder.toString());
         }
-        LogUtils.d("add headers cookie =  %s", headers);
     }
 }

@@ -1,5 +1,7 @@
 package com.wen.magi.baseframe.base.net;
 
+import com.wen.magi.baseframe.models.net.result.ATestResultParams;
+
 import java.io.Serializable;
 
 import static com.android.volley.Request.Method.GET;
@@ -15,10 +17,13 @@ import static com.android.volley.Request.Method.POST;
  */
 public enum EService implements Serializable {
 
+
+    TestRequest("client/shower", ATestResultParams.class),
+
     GymList("client/gym/list", BaseResultParams.class);
 
-    static final int METHOD_OF_GET = GET;
-    static final int METHOD_OF_POST = POST;
+    public static final int METHOD_OF_GET = GET;
+    public static final int METHOD_OF_POST = POST;
 
     private String mUrl;
     private int mUrlType;
@@ -36,15 +41,15 @@ public enum EService implements Serializable {
         mMethod = method;
     }
 
-    String getUrl() {
+    public String getUrl() {
         return mUrl;
     }
 
-    int getUrlType() {
+    public int getUrlType() {
         return mUrlType;
     }
 
-    Class<? extends BaseResultParams> getClazz() {
+    public Class<? extends BaseResultParams> getClazz() {
         return mClazz;
     }
 }

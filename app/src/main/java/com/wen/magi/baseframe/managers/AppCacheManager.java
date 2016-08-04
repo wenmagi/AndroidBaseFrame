@@ -17,10 +17,11 @@ import java.io.File;
  */
 public class AppCacheManager {
 
+    private static final String CACHE_DIR_NAME = "ppy_card_new";
     private static AppCacheManager mManager;
 
     private AppCacheManager() {
-        cacheDirName = "ppy_card_new";
+        cacheDirName = CACHE_DIR_NAME;
         context = AppManager.getApplicationContext();
         initCache();
 
@@ -62,7 +63,7 @@ public class AppCacheManager {
     /**
      * The cache dir's name.
      */
-    protected String cacheDirName = "ppy_card_new";
+    protected String cacheDirName = CACHE_DIR_NAME;
 
 
     /**
@@ -74,17 +75,6 @@ public class AppCacheManager {
      * context.
      */
     protected Context context;
-
-
-    // protected StorageCache(String cacheDirName, Context context) {
-    // this.cacheDirName = cacheDirName;
-    // this.context = context;
-    // }
-
-//  public static void initCache(String cacheDirName, Context context) {
-//    if (mManager == null)
-//      mManager = new CacheManager(cacheDirName, context);
-//  }
 
     public Context getContext() {
         return context;

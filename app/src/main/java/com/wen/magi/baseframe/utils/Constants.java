@@ -15,4 +15,13 @@ public class Constants {
      */
     public static final String SETTINGS_IS_PUSHMESSAGE_ON = "settings_is_pushmessage_on";
     public static final String SETTINGS_PIC_QUALITY = "settings_pic_quality";
+    /**
+     * BitmapUtils
+     */
+    public static final String BITMAP_SCALED_COPY_PATH = "_basefragment_copy";
+
+    /**
+     * BaseJustShowActivity
+     */
+    public static final String BUNDLE_JUMP_TO_BASE_JUST_SHOW_ACTIVITY_INFLATE_ID = "inflate_id";
 }

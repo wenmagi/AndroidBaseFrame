@@ -4,31 +4,32 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.wen.magi.baseframe.R;
+import com.wen.magi.baseframe.managers.RequestQueueManager;
+import com.wen.magi.baseframe.utils.AResponseHelper;
 import com.wen.magi.baseframe.base.net.BaseRequestParams;
+import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
-import com.wen.magi.baseframe.base.net.ARequest;
+import com.wen.magi.baseframe.utils.ARequestHelper;
 import com.wen.magi.baseframe.bundles.BaseBundleParams;
 import com.wen.magi.baseframe.utils.InjectUtils;
 import com.wen.magi.baseframe.utils.LogUtils;
+import com.wen.magi.baseframe.utils.ViewUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 
 import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by MVEN on 16/5/3.
+ * <p/>
+ * 子类可以调用的方法{@link #startActivity(Intent)} {@link #startRequest(EService)}
  */
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, UrlRequest.RequestDelegate {
 
-    /**
-     *
-     */
     public enum TRANSITION {
         LEFT_IN,
         TOP_IN,
@@ -37,12 +38,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected TRANSITION transition = TRANSITION.LEFT_IN;
+    private boolean hasRequest = false;
+    //用作request的tag
+    private String className;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initProperties();
         initView();
+        className = getLocalClassName();
     }
 
     private void initProperties() {
@@ -85,10 +90,17 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    /**
+     * 页面关闭后，
+     * 1.unregister EventBus
+     * 2.取消该页面在队列中存放的网络请求
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (hasRequest)
+            RequestQueueManager.cancelTag(className);
     }
 
     @Override
@@ -96,8 +108,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         if (isValidActivity())
             OnClickView(v);
     }
-
-    protected abstract void OnClickView(View v);
 
     private void initView() {
         RelativeLayout contentView = new RelativeLayout(this);
@@ -162,7 +172,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      *
      * @return 当前Activity是否有效
      */
-    protected boolean isValidActivity() {
+    private boolean isValidActivity() {
         boolean flag;
         try {
             flag = !isFinishing();
@@ -223,21 +233,88 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             return;
         }
 
-        ARequest.start(this, service, param);
+        hasRequest = true;
+        ARequestHelper.start(className, this, service, param);
     }
 
 
     @Override
-    public void requestFailed(UrlRequest request, int statusCode, String errorString) {
+    public void requestFailed(final UrlRequest request, final int statusCode, final String errorString) {
+        if (!isValidActivity())
+            return;
 
+        ViewUtils.runInHandlerThread(new Runnable() {
+            @Override
+            public void run() {
+                if (errorString == null) {
+                    onNetError(request, statusCode);
+                } else {
+                    onResponseError(request, statusCode, errorString);
+                }
+            }
+        });
     }
 
     @Override
-    public void requestFinished(UrlRequest request) {
+    public void requestFinished(final UrlRequest request) {
         if (!isValidActivity() || request == null)
             return;
 
+        final BaseResultParams resultParams = AResponseHelper.parseResultParams(request);
+
+        if (resultParams == null)
+            return;
+
+        if (!ViewUtils.isInMainThread())
+            ViewUtils.runInHandlerThread(new Runnable() {
+                @Override
+                public void run() {
+                    onResponseSuccess(request, resultParams);
+                }
+            });
+        else
+            onResponseSuccess(request, resultParams);
     }
 
+    /**
+     * 子类可复写的方法
+     *
+     * @param request
+     * @param resultParams
+     */
 
+    /**
+     * 网络访问成功 返回数据
+     *
+     * @param request      网络请求
+     * @param resultParams 返回数据对象
+     */
+    protected void onResponseSuccess(UrlRequest request, BaseResultParams resultParams) {
+    }
+
+    /**
+     * 网络访问成功，但服务器未返回正确数据，返回errorString
+     *
+     * @param request     网络请求
+     * @param statusCode  返回码
+     * @param errorString 错误信息
+     */
+    protected void onResponseError(UrlRequest request, int statusCode, String errorString) {
+    }
+
+    /**
+     * 网络访问失败
+     *
+     * @param request    网络请求
+     * @param statusCode 返回码
+     */
+    protected void onNetError(UrlRequest request, int statusCode) {
+    }
+
+    /**
+     * 点击事件
+     *
+     * @param v
+     */
+    protected abstract void OnClickView(View v);
 }

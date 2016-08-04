@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.wen.magi.baseframe.managers.RequestQueueManager;
 import com.wen.magi.baseframe.utils.LangUtils;
+import com.wen.magi.baseframe.utils.LogUtils;
 import com.wen.magi.baseframe.utils.StringUtils;
 import com.wen.magi.baseframe.utils.SysUtils;
 import com.wen.magi.baseframe.utils.WebUtils;
@@ -82,7 +83,7 @@ public class StringRequestPriority extends StringRequest {
 
     /*
      * (non-Javadoc)
-     *
+     * 对于此次请求的返回结果，判断用户是否登陆，保存SessionCookie
      * @see
      * com.android.volley.toolbox.StringRequest#parseNetworkResponse(com.android.volley.NetworkResponse
      * )
@@ -91,6 +92,7 @@ public class StringRequestPriority extends StringRequest {
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         // since we don't know which of the two underlying network vehicles
         // will Volley use, we have to handle and store session cookies manually
+        LogUtils.e("wwwwwwwwww  response.headers %s",response.headers);
         if (getUrl().contains("client/login") && response.statusCode == 200) {
             String content = StringUtils.utf8String(response.data, "");
             if (LangUtils.isNotEmpty(content)) {

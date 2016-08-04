@@ -17,7 +17,7 @@ public class AppConfig {
     static {
         //区分测试服，正式服URL
         if (DEV_BUILD) {
-            DEFAULT_URL = "";
+            DEFAULT_URL = "http://api.xxkuaipao.com:8018";
         } else {
             DEFAULT_URL = "";
         }

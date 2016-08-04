@@ -1,6 +1,8 @@
 package com.wen.magi.baseframe.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.wen.magi.baseframe.base.net.BaseResultParams;
+import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.utils.LangUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 
@@ -13,10 +15,24 @@ import com.wen.magi.baseframe.web.UrlRequest;
 
 public class AResponseHelper {
 
+    public static BaseResultParams parseResultParams(UrlRequest request) {
+        return parseResultParams(request, UrlRequest.REQUEST_SUCCESS_CODE);
+    }
+
     public static BaseResultParams parseResultParams(UrlRequest request, int statusCode) {
-        BaseResultParams result = null;
+        BaseResultParams result = new BaseResultParams();
+        result.code = statusCode;
+
+
         if (request == null || LangUtils.isEmpty(request.getStringData()))
-            return null;
-        return null;
+            return result;
+
+        String jsonStr = request.getStringData();
+        if (jsonStr == null)
+            return result;
+
+        result = JSON.parseObject(jsonStr, request.getNetworkParams().service.getClazz());
+
+        return result;
     }
 }

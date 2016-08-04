@@ -11,8 +11,10 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 /**
  * Created by MVEN on 16/6/16.
@@ -113,5 +115,105 @@ public class BitMapUtils {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
+    }
+
+    /**
+     * 创建一个缩放到指定大小的Bitmap 并保存到文件中
+     *
+     * @param originFile
+     * @param maxWidth
+     * @param maxHeight
+     * @return
+     */
+    public static File createAndSaveScaledBitmap(File originFile, int maxWidth,
+                                                 int maxHeight) {
+        if (originFile == null || !originFile.exists() || maxWidth <= 0 || maxHeight <= 0)
+            return originFile;
+
+        Bitmap ret = null;
+        double width = 0, height = 0;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
+            width = options.outWidth;
+            height = options.outHeight;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (width != 0 && height != 0) {
+            if (width <= maxWidth || height <= maxHeight)
+                return originFile;
+
+            int sample = 1;
+
+            if (width > maxWidth) {
+                sample = (int) Math.ceil(width / maxWidth);
+                height = height / sample;
+            }
+
+            if (height > maxHeight)
+                sample += (int) Math.ceil(height / maxHeight);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            try {
+                options.inSampleSize = sample;
+                ret = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
+            } catch (OutOfMemoryError e) {
+                options.inSampleSize = sample * 2;
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                try {
+                    ret = BitmapFactory.decodeFile(originFile.getAbsolutePath(), options);
+                } catch (OutOfMemoryError e1) {
+                }
+            }
+        } else {
+            return originFile;
+        }
+
+        if (ret.getWidth() > maxWidth || ret.getHeight() > maxHeight) {
+            ret = createScaledBitmap(ret, maxWidth, maxHeight);
+        }
+
+        if (ret == null)
+            return originFile;
+
+        File newFile = new File(originFile.getAbsolutePath() + Constants.BITMAP_SCALED_COPY_PATH);
+        IOUtils.saveBitmap(ret, newFile, Bitmap.CompressFormat.JPEG, 85);
+
+        if (newFile.exists()) {
+            return newFile;
+        }
+        return originFile;
+    }
+
+    /**
+     * 创建一个缩放到指定大小的Bitmap
+     *
+     * @param bm
+     * @param maxWidth
+     * @param maxHeight
+     * @return Bitmap
+     */
+    public static Bitmap createScaledBitmap(@NonNull Bitmap bm, int maxWidth, int maxHeight) {
+        if (bm.getWidth() <= maxWidth && bm.getHeight() <= maxHeight)
+            return bm;
+
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+
+        if (bm.getWidth() > maxWidth) {
+            width = maxWidth;
+            height = (int) (bm.getHeight() * (maxWidth + 0.0) / bm.getWidth());
+        }
+
+        if (height > maxHeight) {
+            width = (int) (width * (maxHeight + 0.0) / height);
+            height = maxHeight;
+        }
+
+        return Bitmap.createScaledBitmap(bm, width, height, true);
     }
 }
