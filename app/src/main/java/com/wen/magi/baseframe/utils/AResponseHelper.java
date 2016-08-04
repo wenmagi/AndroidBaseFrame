@@ -2,8 +2,6 @@ package com.wen.magi.baseframe.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.wen.magi.baseframe.base.net.BaseResultParams;
-import com.wen.magi.baseframe.base.net.EService;
-import com.wen.magi.baseframe.utils.LangUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 
 /**

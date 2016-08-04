@@ -9,15 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.wen.magi.baseframe.managers.RequestQueueManager;
-import com.wen.magi.baseframe.utils.AResponseHelper;
 import com.wen.magi.baseframe.base.net.BaseRequestParams;
 import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
-import com.wen.magi.baseframe.utils.ARequestHelper;
 import com.wen.magi.baseframe.bundles.BaseBundleParams;
+import com.wen.magi.baseframe.managers.RequestQueueManager;
+import com.wen.magi.baseframe.utils.ARequestHelper;
+import com.wen.magi.baseframe.utils.AResponseHelper;
 import com.wen.magi.baseframe.utils.InjectUtils;
-import com.wen.magi.baseframe.utils.LogUtils;
 import com.wen.magi.baseframe.utils.ViewUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 

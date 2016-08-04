@@ -10,10 +10,14 @@ import android.widget.TextView;
 import com.wen.magi.baseframe.R;
 import com.wen.magi.baseframe.annotations.From;
 import com.wen.magi.baseframe.base.BaseActivity;
+<<<<<<< HEAD
 import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.models.net.request.ATestRequestParams;
 import com.wen.magi.baseframe.models.net.result.ATestResultParams;
+=======
+import com.wen.magi.baseframe.utils.LogUtils;
+>>>>>>> f68154aa475bb1d3c917048732c4d3418cb9ff8e
 import com.wen.magi.baseframe.utils.SysUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 import com.wen.magi.baseframe.web.WebActivity;
@@ -46,6 +50,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
+<<<<<<< HEAD
 
         startRequest();
         startRequest();
@@ -97,6 +102,9 @@ public class MainActivity extends BaseActivity {
         request.limit = 10;
         request.nextOffset = i++;
         startRequest(EService.TestRequest, request);
+=======
+        LogUtils.e("wwwwwwwwweeeee");
+>>>>>>> f68154aa475bb1d3c917048732c4d3418cb9ff8e
     }
 
     @Override

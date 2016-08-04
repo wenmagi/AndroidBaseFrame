@@ -1,18 +1,11 @@
 package com.wen.magi.baseframe.utils;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Random;
 import java.util.TimeZone;
 
 /**

@@ -10,8 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.ResultReceiver;
-import android.support.annotation.NonNull;
-import android.support.v4.text.TextUtilsCompat;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.TouchDelegate;

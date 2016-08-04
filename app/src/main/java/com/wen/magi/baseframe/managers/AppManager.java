@@ -3,7 +3,6 @@ package com.wen.magi.baseframe.managers;
 import android.content.Context;
 
 import com.wen.magi.baseframe.algorithms;
-import com.wen.magi.baseframe.base.AppApplication;
 import com.wen.magi.baseframe.models.AppUser;
 import com.wen.magi.baseframe.utils.Constants;
 import com.wen.magi.baseframe.utils.IOUtils;

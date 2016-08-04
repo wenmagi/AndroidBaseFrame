@@ -2,7 +2,6 @@ package com.wen.magi.baseframe.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.widget.ListView;
 
 import com.wen.magi.baseframe.utils.LogUtils;
