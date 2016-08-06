@@ -1,8 +1,11 @@
 package com.wen.magi.baseframe.activities;
 
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.TextView;
@@ -14,6 +17,7 @@ import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.models.net.request.ATestRequestParams;
 import com.wen.magi.baseframe.models.net.result.ATestResultParams;
+import com.wen.magi.baseframe.utils.LogUtils;
 import com.wen.magi.baseframe.utils.SysUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 import com.wen.magi.baseframe.web.WebActivity;
@@ -22,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 import static com.wen.magi.baseframe.utils.Constants.ACTIVITY_WEB_KEY_INTENT_URL;
 
 public class MainActivity extends BaseActivity {
@@ -47,49 +52,26 @@ public class MainActivity extends BaseActivity {
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
 
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        finish();
+//        Thread thread = new Thread(runnable);
+//        thread.setDaemon(true);
+//        thread.start();
+//        int i = 1 / 0;
     }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+
+            while (true) {
+                try {
+                    LogUtils.e("wwwwwwwwwwww runnable");
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 
     private void startRequest() {
         ATestRequestParams request = new ATestRequestParams();
@@ -99,19 +81,18 @@ public class MainActivity extends BaseActivity {
         startRequest(EService.TestRequest, request);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void OnClickView(View v) {
         if (v == mainTv) {
             Intent intent = new Intent(this, DialogTestActivity.class);
-//            startActivity(DialogTestActivity.class);
             if (SysUtils.nowSDKINTBigger(21)) {
                 startActivity(intent,
-                        ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, mainTv, "shareNames").toBundle());
+                        makeSceneTransitionAnimation(MainActivity.this, mainTv, "shareNames").toBundle());
             } else
                 startActivity(intent);
 
         } else if (v == mainTv1) {
-//            viewStub.setVisibility(View.VISIBLE);
             if (linearLayout != null)
                 return;
             linearLayout = viewStub.inflate();

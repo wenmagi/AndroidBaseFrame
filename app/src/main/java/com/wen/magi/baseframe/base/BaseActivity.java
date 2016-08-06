@@ -5,19 +5,19 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.wen.magi.baseframe.managers.RequestQueueManager;
-import com.wen.magi.baseframe.utils.AResponseHelper;
 import com.wen.magi.baseframe.base.net.BaseRequestParams;
 import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
-import com.wen.magi.baseframe.utils.ARequestHelper;
 import com.wen.magi.baseframe.bundles.BaseBundleParams;
+import com.wen.magi.baseframe.managers.RequestQueueManager;
+import com.wen.magi.baseframe.utils.ARequestHelper;
+import com.wen.magi.baseframe.utils.AResponseHelper;
 import com.wen.magi.baseframe.utils.InjectUtils;
-import com.wen.magi.baseframe.utils.LogUtils;
 import com.wen.magi.baseframe.utils.ViewUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 
@@ -114,6 +114,71 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         setContentView(contentView);
     }
 
+    /**
+     * 判断当前Activity是否有效，如果当前Activity已经被回收，返回false
+     *
+     * @return 当前Activity是否有效
+     */
+    private boolean isValidActivity() {
+        boolean flag;
+        try {
+            flag = !isFinishing();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                flag = flag && !isDestroyed();
+            }
+        } catch (RuntimeException e) {
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    @Override
+    public void requestFailed(final UrlRequest request, final int statusCode, final String errorString) {
+        if (!isValidActivity())
+            return;
+
+        ViewUtils.runInHandlerThread(new Runnable() {
+            @Override
+            public void run() {
+                if (errorString == null) {
+                    onNetError(request, statusCode);
+                } else {
+                    onResponseError(request, statusCode, errorString);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void requestFinished(final UrlRequest request) {
+        if (!isValidActivity() || request == null)
+            return;
+
+        final BaseResultParams resultParams = AResponseHelper.parseResultParams(request);
+
+        if (resultParams == null)
+            return;
+
+        if (!ViewUtils.isInMainThread())
+            ViewUtils.runInHandlerThread(new Runnable() {
+                @Override
+                public void run() {
+                    onResponseSuccess(request, resultParams);
+                }
+            });
+        else
+            onResponseSuccess(request, resultParams);
+    }
+
+    /*********************************
+     *      以下方法对外开放           *
+     *********************************/
+
+    /**
+     * 子类可使用的方法
+     */
+
     protected void setTransition(TRANSITION transition) {
         this.transition = transition;
     }
@@ -168,25 +233,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     /**
-     * 判断当前Activity是否有效，如果当前Activity已经被回收，返回false
-     *
-     * @return 当前Activity是否有效
-     */
-    private boolean isValidActivity() {
-        boolean flag;
-        try {
-            flag = !isFinishing();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                flag = flag && !isDestroyed();
-            }
-        } catch (RuntimeException e) {
-            flag = false;
-        }
-
-        return flag;
-    }
-
-    /**
      * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
      *
      * @param service 后端服务
@@ -202,33 +248,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param param   HTTP请求参数
      */
     protected void startRequest(EService service, BaseRequestParams param) {
-        startRequest(service, param, 0);
-    }
-
-    /**
-     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
-     *
-     * @param service     后端服务
-     * @param param       HTTP请求参数
-     * @param requestCode 该请求的编号
-     */
-    protected void startRequest(EService service, BaseRequestParams param, int requestCode) {
-        String tag = null;
-        if (getClass() != null) {
-            tag = getClass().getSimpleName();
-        }
-        startRequest(service, param, requestCode, tag);
-    }
-
-    /**
-     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
-     *
-     * @param service     后端服务
-     * @param param       HTTP请求参数
-     * @param requestCode 该请求的编号
-     * @param requestTag  该请求的tag
-     */
-    protected void startRequest(EService service, BaseRequestParams param, int requestCode, String requestTag) {
         if (service == null || isFinishing()) {
             return;
         }
@@ -237,50 +256,21 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         ARequestHelper.start(className, this, service, param);
     }
 
-
-    @Override
-    public void requestFailed(final UrlRequest request, final int statusCode, final String errorString) {
-        if (!isValidActivity())
-            return;
-
-        ViewUtils.runInHandlerThread(new Runnable() {
-            @Override
-            public void run() {
-                if (errorString == null) {
-                    onNetError(request, statusCode);
-                } else {
-                    onResponseError(request, statusCode, errorString);
-                }
-            }
-        });
+    /**
+     * 判断viewPagerID的ViewPager中，position位置的Fragment是否存在于内存中
+     *
+     * @param viewPagerID
+     * @param position
+     * @return
+     */
+    public Fragment getFragmentCache(int viewPagerID, int position) {
+        return getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + viewPagerID + ":" + position);
     }
 
-    @Override
-    public void requestFinished(final UrlRequest request) {
-        if (!isValidActivity() || request == null)
-            return;
-
-        final BaseResultParams resultParams = AResponseHelper.parseResultParams(request);
-
-        if (resultParams == null)
-            return;
-
-        if (!ViewUtils.isInMainThread())
-            ViewUtils.runInHandlerThread(new Runnable() {
-                @Override
-                public void run() {
-                    onResponseSuccess(request, resultParams);
-                }
-            });
-        else
-            onResponseSuccess(request, resultParams);
-    }
 
     /**
      * 子类可复写的方法
-     *
-     * @param request
-     * @param resultParams
      */
 
     /**
@@ -317,4 +307,5 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param v
      */
     protected abstract void OnClickView(View v);
+
 }

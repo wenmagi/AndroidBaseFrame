@@ -28,8 +28,8 @@ public abstract class BaseRequestParams implements Serializable {
     public static final String URL_PARAMS = "url_params";
 
     public HashMap<String, Object> getRequestParams() {
-
         addRequestParams();
+
         return params;
     }
 

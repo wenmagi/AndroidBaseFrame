@@ -92,7 +92,6 @@ public class StringRequestPriority extends StringRequest {
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         // since we don't know which of the two underlying network vehicles
         // will Volley use, we have to handle and store session cookies manually
-        LogUtils.e("wwwwwwwwww  response.headers %s",response.headers);
         if (getUrl().contains("client/login") && response.statusCode == 200) {
             String content = StringUtils.utf8String(response.data, "");
             if (LangUtils.isNotEmpty(content)) {

@@ -158,7 +158,12 @@ public class RequestQueueManager {
         if (token == null) {
             token = IOUtils.getPreferenceValue(SESSION_TOKEN);
         }
-        String sessionId = /*token*/"13521125097_jRlEtx|10dada62b8f329ecf15ddb5c4f2b4756f3e231e9";
+        /**
+         * "13521125097_jRlEtx|10dada62b8f329ecf15ddb5c4f2b4756f3e231e9"
+         *
+         * 该sessionId测试用
+         */
+        String sessionId = token;
         if (sessionId.length() > 0) {
             StringBuilder builder = new StringBuilder();
             builder.append(SESSION_TOKEN);
