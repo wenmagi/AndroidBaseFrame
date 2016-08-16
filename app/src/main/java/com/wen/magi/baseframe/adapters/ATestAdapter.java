@@ -2,7 +2,9 @@ package com.wen.magi.baseframe.adapters;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
+import com.wen.magi.baseframe.R;
 import com.wen.magi.baseframe.base.BaseListAdapter;
 
 import java.util.List;
@@ -21,8 +23,8 @@ public class ATestAdapter extends BaseListAdapter<String> {
     }
 
     @Override
-    protected View getItemView(int position, View convertView, BaseListAdapter<String>.ViewHolder holder) {
-        return null;
+    protected void initItemView(int position, BaseListAdapter<String>.ViewHolder holder) {
+//        TextView v = holder.getView(R.id.stub_id);
     }
 
     @Override

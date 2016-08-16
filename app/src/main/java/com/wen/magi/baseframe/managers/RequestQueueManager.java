@@ -13,7 +13,6 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.wen.magi.baseframe.utils.IOUtils;
 import com.wen.magi.baseframe.utils.LangUtils;
-import com.wen.magi.baseframe.utils.LogUtils;
 import com.wen.magi.baseframe.web.BitmapLruCache;
 
 import java.util.Map;

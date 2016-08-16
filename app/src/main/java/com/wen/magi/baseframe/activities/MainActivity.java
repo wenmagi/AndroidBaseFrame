@@ -51,27 +51,8 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
-
-//        Thread thread = new Thread(runnable);
-//        thread.setDaemon(true);
-//        thread.start();
-//        int i = 1 / 0;
+        double a = 0.03;
     }
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-
-            while (true) {
-                try {
-                    LogUtils.e("wwwwwwwwwwww runnable");
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
     private void startRequest() {
         ATestRequestParams request = new ATestRequestParams();

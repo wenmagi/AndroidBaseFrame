@@ -15,7 +15,22 @@ import android.widget.RelativeLayout;
  * 支持延迟加载的Fragment
  */
 
-
+/**
+ * ViewPager 中的Fragment生命周期
+ * setUserVisibleHint: isVisibleToUser = false
+ * onAttach
+ * onCreate
+ * setUserVisibleHint: isVisibleToUser = true
+ * onCreateView
+ * onActivityCreated
+ * onStart
+ * onResume
+ * onPause
+ * onStop
+ * onDestroyView
+ * onDestroy
+ * onDetach
+ */
 public abstract class BaseLazyLoadFragment extends BaseFragment {
 
     /**
@@ -72,9 +87,24 @@ public abstract class BaseLazyLoadFragment extends BaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser && !isLoaded && isCreatedView) {
-            isLoaded = true;
             onVisible();
         }
+    }
+
+    /**
+     * setUserVisible再onCreateView之前调用
+     * 如果处于ViewPager首页
+     * isCreatedView = true;并没有执行
+     * 所以不会加载数据，此处需要做判断
+     *
+     * @param savedInstanceState
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (getUserVisibleHint())
+            onVisible();
     }
 
     /**
@@ -91,6 +121,8 @@ public abstract class BaseLazyLoadFragment extends BaseFragment {
      * Fragment可见时执行的操作
      */
     private void onVisible() {
+        isLoaded = true;
+
         if (inVisibleView != null) {
             rootView.removeView(inVisibleView);
         }

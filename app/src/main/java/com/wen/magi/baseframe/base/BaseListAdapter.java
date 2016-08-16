@@ -2,6 +2,7 @@ package com.wen.magi.baseframe.base;
 
 import android.content.Context;
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -62,18 +63,18 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
             holder = new ViewHolder(convertView);
         } else
             holder = (ViewHolder) convertView.getTag();
-        return getItemView(position, convertView, holder);
+        initItemView(position, holder);
+        return convertView;
     }
 
     /**
      * 子Adapter复写此方法，对Holder持有的View进行赋值
      *
      * @param position
-     * @param convertView
      * @param holder
      * @return
      */
-    protected abstract View getItemView(int position, View convertView, ViewHolder holder);
+    protected abstract void initItemView(int position, ViewHolder holder);
 
     /**
      * 子Adapter复写此方法，获取itemView的resourseID

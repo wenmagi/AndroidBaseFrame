@@ -1,4 +1,4 @@
-package com.wen.magi.baseframe.views;
+package com.wen.magi.baseframe.views.images;
 
 import android.content.Context;
 import android.util.AttributeSet;

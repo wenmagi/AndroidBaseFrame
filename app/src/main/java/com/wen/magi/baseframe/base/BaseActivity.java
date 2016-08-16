@@ -18,6 +18,7 @@ import com.wen.magi.baseframe.managers.RequestQueueManager;
 import com.wen.magi.baseframe.utils.ARequestHelper;
 import com.wen.magi.baseframe.utils.AResponseHelper;
 import com.wen.magi.baseframe.utils.InjectUtils;
+import com.wen.magi.baseframe.utils.LogUtils;
 import com.wen.magi.baseframe.utils.ViewUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 
@@ -47,6 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         initProperties();
         initView();
+
         className = getLocalClassName();
     }
 
@@ -76,6 +78,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        LogUtils.e("wwwwwwwwwww saveIns");
     }
 
     /**

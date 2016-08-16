@@ -72,7 +72,7 @@ public class IOUtils {
     /**
      * 清除所有preference值
      */
-    public static void clearPreferences() {
+    private static void clearPreferences() {
         SharedPreferences preferences = AppManager.getApplicationContext().getSharedPreferences(KEY_SHARED_PREFERENCE, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();

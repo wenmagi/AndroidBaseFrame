@@ -1,6 +1,7 @@
 package com.wen.magi.baseframe;
 
 import com.wen.magi.baseframe.utils.LangUtils;
+import com.wen.magi.baseframe.utils.LogUtils;
 
 import java.util.Stack;
 
@@ -30,13 +31,17 @@ public class algorithms {
     }
 
     private void testAlgorithms() {
-        int a[] = {1, 2, 0, 0, 0, 14, 9, 5, 10, 5, 6, 7, 8};
-        int b[] = {2, 3, 4, 5, 6, 6};
+//        String a = new String("aa");
+//        String b = new String("aa");
+//        LogUtils.e("wwwwwww %s   %s", a == b, a.equals(b));
+        int a[] = {9, 2, 0, 0, 0};
+        int b[] = {9, 2, 0, 0, 8};
         NODE longer = create(a);
         NODE shorter = create(b);
         sum(longer, shorter, longer, a.length, b.length);
+        printNODE(longer);
         printNODE(reverse(longer));
-        quickSort(a, 0, a.length - 1);
+//        quickSort(a, 0, a.length - 1);
     }
 
 
@@ -172,7 +177,7 @@ public class algorithms {
             aaa += node.data;
             node = node.next;
         }
-//        LogUtils.e("wwwwwwwwww print %s", aaa);
+        LogUtils.e("wwwwwwwwww print %s", aaa);
     }
 
     public static void printTREENODE(TREENODE node) {
