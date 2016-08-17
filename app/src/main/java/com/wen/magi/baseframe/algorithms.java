@@ -1,8 +1,11 @@
 package com.wen.magi.baseframe;
 
+import android.os.Environment;
+
 import com.wen.magi.baseframe.utils.LangUtils;
 import com.wen.magi.baseframe.utils.LogUtils;
 
+import java.io.File;
 import java.util.Stack;
 
 /**
@@ -34,14 +37,16 @@ public class algorithms {
 //        String a = new String("aa");
 //        String b = new String("aa");
 //        LogUtils.e("wwwwwww %s   %s", a == b, a.equals(b));
-        int a[] = {9, 2, 0, 0, 0};
-        int b[] = {9, 2, 0, 0, 8};
-        NODE longer = create(a);
-        NODE shorter = create(b);
-        sum(longer, shorter, longer, a.length, b.length);
-        printNODE(longer);
-        printNODE(reverse(longer));
+//        int a[] = {9, 2, 0, 0, 0};
+//        int b[] = {9, 2, 0, 0, 8};
+//        NODE longer = create(a);
+//        NODE shorter = create(b);
+//        sum(longer, shorter, longer, a.length, b.length);
+//        printNODE(longer);
+//        printNODE(reverse(longer));
 //        quickSort(a, 0, a.length - 1);
+
+        showAllDir(Environment.getExternalStorageDirectory());
     }
 
 
@@ -344,5 +349,24 @@ public class algorithms {
         int[][] array = new int[26][];
         int[] zimu = new int[26];
         zimu['a'] = 10;
+    }
+
+    private void showAllDir(File file) {
+        if (!file.exists()) {
+            LogUtils.e("has no %s file", file);
+            return;
+        }
+        LogUtils.e("file name : %s", file.getName());
+        if (file.isDirectory()) {
+            File[] childFile = file.listFiles();
+            if (!LangUtils.isEmpty(childFile))
+                for (File child : childFile
+                        ) {
+                    LogUtils.e("file name : %s", child.getName());
+                    showAllDir(child);
+                }
+
+
+        }
     }
 }
