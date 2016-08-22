@@ -2,6 +2,7 @@ package com.wen.magi.baseframe;
 
 import android.os.Environment;
 
+import com.wen.magi.baseframe.models.fortest.TestThread;
 import com.wen.magi.baseframe.utils.LangUtils;
 import com.wen.magi.baseframe.utils.LogUtils;
 
@@ -45,10 +46,29 @@ public class algorithms {
 //        printNODE(longer);
 //        printNODE(reverse(longer));
 //        quickSort(a, 0, a.length - 1);
-
-        showAllDir(Environment.getExternalStorageDirectory());
+//        LogUtils.e("wwwwwwwwwwww %s", 4 >>> 1);
+//        showAllDir(Environment.getExternalStorageDirectory());
+        testThread();
     }
 
+
+    private void testThread() {
+        final TestThread testThread = new TestThread();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LogUtils.e("wwwwww  %s", testThread.getValue());
+                LogUtils.e("wwwwww  %s", testThread.getValue());
+            }
+        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LogUtils.e("wwwwww  %s", testThread.getValue());
+                LogUtils.e("wwwwww  %s", testThread.getValue());
+            }
+        }).start();
+    }
 
     private void testTreeNode() {
         algorithms.TREENODE a = new algorithms.TREENODE();

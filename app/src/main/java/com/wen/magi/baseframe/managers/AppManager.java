@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.multidex.MultiDex;
 import android.util.LongSparseArray;
 
 import com.wen.magi.baseframe.algorithms;
@@ -31,6 +32,7 @@ public class AppManager {
 
     public static void initInMainThread(Context context) {
         applicationContext = context;
+        MultiDex.install(applicationContext);
 //        clearPreRes();
         SysUtils.initialize(context);
         RequestQueueManager.initialize(context);

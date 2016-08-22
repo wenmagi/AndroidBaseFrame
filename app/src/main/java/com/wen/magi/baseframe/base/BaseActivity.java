@@ -78,7 +78,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        LogUtils.e("wwwwwwwwwww saveIns");
     }
 
     /**
@@ -192,7 +191,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param clazz 目标activity
      */
     protected void startActivity(Class<? extends BaseActivity> clazz) {
-        startActivity(clazz, null, 0);
+        startActivity(clazz, null, -1);
     }
 
     /**
@@ -202,7 +201,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param pageParam 目标页面参数
      */
     protected void startActivity(Class<? extends BaseActivity> clazz, BaseBundleParams pageParam) {
-        startActivity(clazz, pageParam, 0);
+        startActivity(clazz, pageParam, -1);
     }
 
     /**
