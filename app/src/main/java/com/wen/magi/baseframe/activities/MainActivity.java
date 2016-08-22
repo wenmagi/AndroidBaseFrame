@@ -1,8 +1,11 @@
 package com.wen.magi.baseframe.activities;
 
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.TextView;
@@ -15,9 +18,13 @@ import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.models.net.request.ATestRequestParams;
 import com.wen.magi.baseframe.models.net.result.ATestResultParams;
+<<<<<<< HEAD
 =======
 import com.wen.magi.baseframe.utils.LogUtils;
 >>>>>>> f68154aa475bb1d3c917048732c4d3418cb9ff8e
+=======
+import com.wen.magi.baseframe.utils.LogUtils;
+>>>>>>> dev
 import com.wen.magi.baseframe.utils.SysUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 import com.wen.magi.baseframe.web.WebActivity;
@@ -26,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 import static com.wen.magi.baseframe.utils.Constants.ACTIVITY_WEB_KEY_INTENT_URL;
 
 public class MainActivity extends BaseActivity {
@@ -50,6 +58,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         startRequest();
@@ -94,6 +103,9 @@ public class MainActivity extends BaseActivity {
         startRequest();
         startRequest();
         finish();
+=======
+        double a = 0.03;
+>>>>>>> dev
     }
 
     private void startRequest() {
@@ -107,19 +119,18 @@ public class MainActivity extends BaseActivity {
 >>>>>>> f68154aa475bb1d3c917048732c4d3418cb9ff8e
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void OnClickView(View v) {
         if (v == mainTv) {
             Intent intent = new Intent(this, DialogTestActivity.class);
-//            startActivity(DialogTestActivity.class);
             if (SysUtils.nowSDKINTBigger(21)) {
                 startActivity(intent,
-                        ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, mainTv, "shareNames").toBundle());
+                        makeSceneTransitionAnimation(MainActivity.this, mainTv, "shareNames").toBundle());
             } else
                 startActivity(intent);
 
         } else if (v == mainTv1) {
-//            viewStub.setVisibility(View.VISIBLE);
             if (linearLayout != null)
                 return;
             linearLayout = viewStub.inflate();

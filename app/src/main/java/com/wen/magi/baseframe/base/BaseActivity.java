@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -46,6 +47,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         initProperties();
         initView();
+
         className = getLocalClassName();
     }
 
@@ -113,59 +115,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         setContentView(contentView);
     }
 
-    protected void setTransition(TRANSITION transition) {
-        this.transition = transition;
-    }
-
-    /**
-     * 跳转到其他页面
-     *
-     * @param clazz 目标activity
-     */
-    protected void startActivity(Class<? extends BaseActivity> clazz) {
-        startActivity(clazz, null, 0);
-    }
-
-    /**
-     * 跳转到其他页面
-     *
-     * @param clazz     目标activity
-     * @param pageParam 目标页面参数
-     */
-    protected void startActivity(Class<? extends BaseActivity> clazz, BaseBundleParams pageParam) {
-        startActivity(clazz, pageParam, 0);
-    }
-
-    /**
-     * 跳转到其他页面
-     *
-     * @param clazz       目标activity
-     * @param requestCode 目标activity参数
-     */
-    protected void startActivity(Class<? extends BaseActivity> clazz, int requestCode) {
-        startActivity(clazz, null, requestCode);
-    }
-
-    /**
-     * 跳转到其他页面
-     *
-     * @param clazz       目标activity
-     * @param params      每个activity之间的参数需封装成{@link BaseBundleParams}
-     * @param requestCode 请求码
-     */
-    protected void startActivity(Class<? extends BaseActivity> clazz, BaseBundleParams params, int requestCode) {
-        if (!isValidActivity()) {
-            return;
-        }
-        Intent intent = new Intent(this, clazz);
-        if (params != null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(BaseBundleParams.PARAM_SKEY, params);
-            intent.putExtras(bundle);
-        }
-        startActivityForResult(intent, requestCode);
-    }
-
     /**
      * 判断当前Activity是否有效，如果当前Activity已经被回收，返回false
      *
@@ -184,58 +133,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
         return flag;
     }
-
-    /**
-     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
-     *
-     * @param service 后端服务
-     */
-    protected void startRequest(EService service) {
-        startRequest(service, null);
-    }
-
-    /**
-     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
-     *
-     * @param service 后端服务
-     * @param param   HTTP请求参数
-     */
-    protected void startRequest(EService service, BaseRequestParams param) {
-        startRequest(service, param, 0);
-    }
-
-    /**
-     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
-     *
-     * @param service     后端服务
-     * @param param       HTTP请求参数
-     * @param requestCode 该请求的编号
-     */
-    protected void startRequest(EService service, BaseRequestParams param, int requestCode) {
-        String tag = null;
-        if (getClass() != null) {
-            tag = getClass().getSimpleName();
-        }
-        startRequest(service, param, requestCode, tag);
-    }
-
-    /**
-     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
-     *
-     * @param service     后端服务
-     * @param param       HTTP请求参数
-     * @param requestCode 该请求的编号
-     * @param requestTag  该请求的tag
-     */
-    protected void startRequest(EService service, BaseRequestParams param, int requestCode, String requestTag) {
-        if (service == null || isFinishing()) {
-            return;
-        }
-
-        hasRequest = true;
-        ARequestHelper.start(className, this, service, param);
-    }
-
 
     @Override
     public void requestFailed(final UrlRequest request, final int statusCode, final String errorString) {
@@ -275,11 +172,106 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             onResponseSuccess(request, resultParams);
     }
 
+    /*********************************
+     *      以下方法对外开放           *
+     *********************************/
+
+    /**
+     * 子类可使用的方法
+     */
+
+    protected void setTransition(TRANSITION transition) {
+        this.transition = transition;
+    }
+
+    /**
+     * 跳转到其他页面
+     *
+     * @param clazz 目标activity
+     */
+    protected void startActivity(Class<? extends BaseActivity> clazz) {
+        startActivity(clazz, null, -1);
+    }
+
+    /**
+     * 跳转到其他页面
+     *
+     * @param clazz     目标activity
+     * @param pageParam 目标页面参数
+     */
+    protected void startActivity(Class<? extends BaseActivity> clazz, BaseBundleParams pageParam) {
+        startActivity(clazz, pageParam, -1);
+    }
+
+    /**
+     * 跳转到其他页面
+     *
+     * @param clazz       目标activity
+     * @param requestCode 目标activity参数
+     */
+    protected void startActivity(Class<? extends BaseActivity> clazz, int requestCode) {
+        startActivity(clazz, null, requestCode);
+    }
+
+    /**
+     * 跳转到其他页面
+     *
+     * @param clazz       目标activity
+     * @param params      每个activity之间的参数需封装成{@link BaseBundleParams}
+     * @param requestCode 请求码
+     */
+    protected void startActivity(Class<? extends BaseActivity> clazz, BaseBundleParams params, int requestCode) {
+        if (!isValidActivity()) {
+            return;
+        }
+        Intent intent = new Intent(this, clazz);
+        if (params != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(BaseBundleParams.PARAM_SKEY, params);
+            intent.putExtras(bundle);
+        }
+        startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
+     *
+     * @param service 后端服务
+     */
+    protected void startRequest(EService service) {
+        startRequest(service, null);
+    }
+
+    /**
+     * 发送HTTP请求，返回结果在requestFinished、requestFailed中处理
+     *
+     * @param service 后端服务
+     * @param param   HTTP请求参数
+     */
+    protected void startRequest(EService service, BaseRequestParams param) {
+        if (service == null || isFinishing()) {
+            return;
+        }
+
+        hasRequest = true;
+        ARequestHelper.start(className, this, service, param);
+    }
+
+    /**
+     * 判断viewPagerID的ViewPager中，position位置的Fragment是否存在于内存中
+     *
+     * @param viewPagerID
+     * @param position
+     * @return
+     */
+    public Fragment getFragmentCache(int viewPagerID, int position) {
+        return getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:" + viewPagerID + ":" + position);
+    }
+
+
     /**
      * 子类可复写的方法
-     *
-     * @param request
-     * @param resultParams
      */
 
     /**
@@ -316,4 +308,5 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param v
      */
     protected abstract void OnClickView(View v);
+
 }

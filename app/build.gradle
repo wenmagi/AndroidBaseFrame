@@ -19,6 +19,30 @@ android {
             multiDexEnabled true
         }
     }
+
+    productFlavors {
+        tencent {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "tencent"]
+        }
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
+        }
+        _360 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "360"]
+        }
+        inhouse {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "inhouse"]
+        }
+        baidu {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "baidu"]
+        }
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        }
+//        smartisan {
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "smartisan"]
+//        }
+    }
 }
 
 dependencies {
@@ -29,5 +53,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0' //EventBus，用于消息传递
     compile 'com.pnikosis:materialish-progress:1.0'//加载wheel
     compile 'de.greenrobot:greendao:2.0.0'//greenDao:轻量极速的ORM解决方案
+    compile 'com.android.support:multidex:1.0.0'//配合multiDexEnabled true，再application中初始化，install，突破65535限制
 
 }

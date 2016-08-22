@@ -36,16 +36,16 @@ public class LangUtils {
         return s != null && s.length > 0;
     }
 
-    public static boolean isEmpty(byte[] s) {
-        return s == null || s.length == 0;
-    }
-
     public static <E> boolean isEmpty(Collection<E> list) {
         return list == null || list.size() == 0;
     }
 
     public static <E> boolean isNotEmpty(Collection<E> list) {
         return list != null && list.size() > 0;
+    }
+
+    public static <E> boolean isEmpty(E[] array) {
+        return array == null || array.length == 0;
     }
 
     /**

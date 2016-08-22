@@ -1,6 +1,7 @@
 package com.wen.magi.baseframe.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -12,8 +13,11 @@ import android.graphics.drawable.Drawable;
 import android.os.ResultReceiver;
 import android.text.TextUtils;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.TouchDelegate;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -314,5 +318,55 @@ public class ViewUtils {
             toast.setText(toastStr);
         }
         toast.show();
+    }
+
+
+    /**
+     * Remove a view from viewgroup.
+     *
+     * @param o can be null
+     */
+    public static void removeFromSuperView(Object o) {
+        if (o == null)
+            return;
+
+        if (o instanceof View) {
+            View view = (View) o;
+            final ViewParent parent = view.getParent();
+            if (parent == null)
+                return;
+            if (parent instanceof ViewGroup) {
+                ViewGroup group = (ViewGroup) parent;
+                group.removeView(view);
+            } else
+                LogUtils.w("the parent of view %s is not a viewgroup: %s", view, parent);
+        } else if (o instanceof Dialog) {
+            Dialog dialog = (Dialog) o;
+            dialog.hide();
+        }
+    }
+
+
+    /**
+     * 设置View点击变色效果,这样不需要为ImageView准备两套图
+     * 点击前不透明，点击后透明度变为60%
+     *
+     * @param targetView 需要添加点击效果的View
+     */
+    public static void setImageClickStateChangeListener(final View targetView) {
+        targetView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        targetView.setAlpha(0.6f);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        targetView.setAlpha(1f);
+                        break;
+                }
+                return false;
+            }
+        });
     }
 }
