@@ -3,6 +3,7 @@ package com.wen.magi.baseframe.activities;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,18 +14,11 @@ import android.widget.TextView;
 import com.wen.magi.baseframe.R;
 import com.wen.magi.baseframe.annotations.From;
 import com.wen.magi.baseframe.base.BaseActivity;
-<<<<<<< HEAD
 import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
+import com.wen.magi.baseframe.databinding.ActivityMainBinding;
 import com.wen.magi.baseframe.models.net.request.ATestRequestParams;
 import com.wen.magi.baseframe.models.net.result.ATestResultParams;
-<<<<<<< HEAD
-=======
-import com.wen.magi.baseframe.utils.LogUtils;
->>>>>>> f68154aa475bb1d3c917048732c4d3418cb9ff8e
-=======
-import com.wen.magi.baseframe.utils.LogUtils;
->>>>>>> dev
 import com.wen.magi.baseframe.utils.SysUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 import com.wen.magi.baseframe.web.WebActivity;
@@ -51,61 +45,16 @@ public class MainActivity extends BaseActivity {
 
     int i = 0;
     private HashMap<String, Objects> hashMap;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.mainTv.setText("");
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
-        startRequest();
         finish();
-=======
-        double a = 0.03;
->>>>>>> dev
     }
 
     private void startRequest() {
@@ -114,9 +63,6 @@ public class MainActivity extends BaseActivity {
         request.limit = 10;
         request.nextOffset = i++;
         startRequest(EService.TestRequest, request);
-=======
-        LogUtils.e("wwwwwwwwweeeee");
->>>>>>> f68154aa475bb1d3c917048732c4d3418cb9ff8e
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
