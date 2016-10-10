@@ -17,6 +17,7 @@ import com.wen.magi.baseframe.base.BaseActivity;
 import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.databinding.ActivityMainBinding;
+import com.wen.magi.baseframe.models.AppUser;
 import com.wen.magi.baseframe.models.net.request.ATestRequestParams;
 import com.wen.magi.baseframe.models.net.result.ATestResultParams;
 import com.wen.magi.baseframe.utils.SysUtils;
@@ -45,13 +46,10 @@ public class MainActivity extends BaseActivity {
 
     int i = 0;
     private HashMap<String, Objects> hashMap;
-    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.mainTv.setText("");
         mainTv.setOnClickListener(this);
         mainTv1.setOnClickListener(this);
         finish();
@@ -88,6 +86,11 @@ public class MainActivity extends BaseActivity {
             intent.putExtra(ACTIVITY_WEB_KEY_INTENT_URL, "https://www.baidu.com");
             startActivity(intent);
         }
+    }
+
+    @Override
+    public int getContentResID() {
+        return R.layout.activity_main;
     }
 
     public static ArrayList<String> getDummyData(int num) {

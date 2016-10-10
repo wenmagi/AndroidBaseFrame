@@ -2,22 +2,22 @@ package com.wen.magi.baseframe.base;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.wen.magi.baseframe.base.net.BaseRequestParams;
 import com.wen.magi.baseframe.base.net.BaseResultParams;
 import com.wen.magi.baseframe.base.net.EService;
 import com.wen.magi.baseframe.bundles.BaseBundleParams;
+import com.wen.magi.baseframe.databinding.ActivityMainBinding;
 import com.wen.magi.baseframe.managers.RequestQueueManager;
 import com.wen.magi.baseframe.utils.ARequestHelper;
 import com.wen.magi.baseframe.utils.AResponseHelper;
-import com.wen.magi.baseframe.utils.InjectUtils;
+import com.wen.magi.baseframe.utils.SysUtils;
 import com.wen.magi.baseframe.utils.ViewUtils;
 import com.wen.magi.baseframe.web.UrlRequest;
 
@@ -28,43 +28,37 @@ import org.greenrobot.eventbus.EventBus;
  * <p/>
  * 子类可以调用的方法{@link #startActivity(Intent)} {@link #startRequest(EService)}
  */
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, UrlRequest.RequestDelegate {
+public abstract class BaseActivity extends ABActivity implements View.OnClickListener, UrlRequest.RequestDelegate {
 
-    public enum TRANSITION {
-        LEFT_IN,
-        TOP_IN,
-        RIGHT_IN,
-        BOTTOM_IN
-    }
-
-    protected TRANSITION transition = TRANSITION.LEFT_IN;
     private boolean hasRequest = false;
     //用作request的tag
     private String className;
+
+    @SuppressWarnings("unused")
+    protected ActivityMainBinding baseBinding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initProperties();
-        initView();
+        baseBinding = DataBindingUtil.setContentView(this, getContentResID());
 
         className = getLocalClassName();
     }
 
     private void initProperties() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        // see http://developer.android.com/intl/zh-cn/about/versions/marshmallow/android-6.0-changes.html#behavior-text-selection
+        if (SysUtils.nowSDKINTBigger(Build.VERSION_CODES.M)) {
+            getDelegate().setHandleNativeActionModesEnabled(false);
+        }
     }
 
     @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        InjectUtils.autoInjectR(this);
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        InjectUtils.autoInjectR(this);
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(null);
     }
 
     /**
@@ -72,7 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * <p/>
      * 均可触发
      *
-     * @param outState
+     * @param outState savedBundle
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -84,7 +78,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * <p/>
      * #BaseActivity 确定被销毁后，才可触发
      *
-     * @param savedInstanceState
+     * @param savedInstanceState savedBundle
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -104,15 +98,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             RequestQueueManager.cancelTag(className);
     }
 
+    /**
+     * 处理点击事件(反应较慢,Activity已经结束,无谓执行逻辑)
+     *
+     * @param v targetView
+     */
     @Override
     public void onClick(View v) {
         if (isValidActivity())
             OnClickView(v);
-    }
-
-    private void initView() {
-        RelativeLayout contentView = new RelativeLayout(this);
-        setContentView(contentView);
     }
 
     /**
@@ -177,18 +171,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      *********************************/
 
     /**
-     * 子类可使用的方法
-     */
-
-    protected void setTransition(TRANSITION transition) {
-        this.transition = transition;
-    }
-
-    /**
      * 跳转到其他页面
      *
      * @param clazz 目标activity
      */
+    @SuppressWarnings("unused")
     protected void startActivity(Class<? extends BaseActivity> clazz) {
         startActivity(clazz, null, -1);
     }
@@ -199,6 +186,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param clazz     目标activity
      * @param pageParam 目标页面参数
      */
+    @SuppressWarnings("unused")
     protected void startActivity(Class<? extends BaseActivity> clazz, BaseBundleParams pageParam) {
         startActivity(clazz, pageParam, -1);
     }
@@ -209,6 +197,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param clazz       目标activity
      * @param requestCode 目标activity参数
      */
+    @SuppressWarnings("unused")
     protected void startActivity(Class<? extends BaseActivity> clazz, int requestCode) {
         startActivity(clazz, null, requestCode);
     }
@@ -238,6 +227,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      *
      * @param service 后端服务
      */
+    @SuppressWarnings("unused")
     protected void startRequest(EService service) {
         startRequest(service, null);
     }
@@ -260,10 +250,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     /**
      * 判断viewPagerID的ViewPager中，position位置的Fragment是否存在于内存中
      *
-     * @param viewPagerID
-     * @param position
-     * @return
+     * @param viewPagerID viewPagerID
+     * @param position    position
+     * @return Fragment
      */
+    @SuppressWarnings("unused")
     public Fragment getFragmentCache(int viewPagerID, int position) {
         return getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:" + viewPagerID + ":" + position);
@@ -280,6 +271,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param request      网络请求
      * @param resultParams 返回数据对象
      */
+    @SuppressWarnings("unused")
     protected void onResponseSuccess(UrlRequest request, BaseResultParams resultParams) {
     }
 
@@ -290,6 +282,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param statusCode  返回码
      * @param errorString 错误信息
      */
+    @SuppressWarnings("unused")
     protected void onResponseError(UrlRequest request, int statusCode, String errorString) {
     }
 
@@ -299,14 +292,21 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param request    网络请求
      * @param statusCode 返回码
      */
+    @SuppressWarnings("unused")
     protected void onNetError(UrlRequest request, int statusCode) {
     }
 
     /**
      * 点击事件
      *
-     * @param v
+     * @param v targetView
      */
     protected abstract void OnClickView(View v);
 
+    /**
+     * 设置Activity的ContentView,xml文件
+     *
+     * @return 布局文件ID
+     */
+    public abstract int getContentResID();
 }

@@ -21,3 +21,13 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext{
+    VERSIONS = [
+            "supportLibrary" : '24.1.1'
+    ]
+}
+
+def supportLibrary(name){
+    return "com.android.support:${name}:${rootProject.VERSIONS["supportLibrary"]}"
+}

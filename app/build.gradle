@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.wen.magi.baseframe"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -25,6 +25,9 @@ android {
     dataBinding {
         enabled = true
     }
+
+    //添加support「v4」、「v7」从api 22 =====》24 升级后被丢弃的用法
+    useLibrary 'org.apache.http.legacy'
 
     productFlavors {
         tencent {
@@ -54,12 +57,18 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v4:22.1.1'
+
+    compile supportLibrary("support-v4")
+    compile supportLibrary("appcompat-v7")
+    compile supportLibrary("cardview-v7")
+    compile supportLibrary("design")
+    compile supportLibrary("palette-v7")
+    compile supportLibrary("recyclerview-v7")
+    compile supportLibrary("customtabs")
+
     compile 'org.greenrobot:eventbus:3.0.0' //EventBus，用于消息传递
     compile 'com.pnikosis:materialish-progress:1.0'//加载wheel
     compile 'de.greenrobot:greendao:2.0.0'//greenDao:轻量极速的ORM解决方案
-    compile 'com.android.support:multidex:1.0.0'
-//配合multiDexEnabled true，再application中初始化，install，突破65535限制
+    compile 'com.android.support:multidex:1.0.0' //配合multiDexEnabled true，再application中初始化，install，突破65535限制
 
 }
